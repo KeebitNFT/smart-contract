@@ -40,6 +40,7 @@ contract Marketplace is ReentrancyGuard{
         marketOwner = payable(msg.sender);
         feePercent = _feePercent;
     }
+    
     // list nft on marketplace
     function listNFT(IERC721 _nftContract, uint _tokenId, uint _price) 
     external 
@@ -64,6 +65,7 @@ contract Marketplace is ReentrancyGuard{
         );
         
     }
+
     //buy nft
     function buyNFT(uint _tokenId) 
     external 
@@ -94,6 +96,7 @@ contract Marketplace is ReentrancyGuard{
         );
 
     }
+
     // resell nft purchased from marketplace
     function relistNFT(IERC721 _nftContract, uint _tokenId, uint _price) 
     external 
@@ -101,7 +104,23 @@ contract Marketplace is ReentrancyGuard{
     nonReentrant{
         require(_price > 0, "Price must be at least 1 wei");
         _nftContract.transferFrom(msg.sender, address(this), _tokenId);
+        nftSold--;
+
+        NFT storage nft = nfts[_tokenId];
+        nft.seller = payable(msg.sender);
+        nft.owner = payable(address(this));
+        nft.isSold = false;
+        nft.price = _price;
+
+        emit NFTListed(
+            _nftContract, 
+            _tokenId, 
+            _price, 
+            msg.sender,
+            address(this)
+        );
     }
+
     function getTotalPrice(uint _tokenId) 
     view 
     public 
