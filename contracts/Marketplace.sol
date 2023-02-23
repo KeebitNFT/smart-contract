@@ -144,6 +144,7 @@ contract Marketplace is ReentrancyGuard{
         return(unsoldNFTs);
     }
 
+    // get all my NFTs
     function getMyNFTs() public view returns (NFT[] memory){
         uint myNFTCount = 0;
         for (uint i = 0; i < nftCount; i++){
@@ -161,5 +162,25 @@ contract Marketplace is ReentrancyGuard{
             }
         }
         return(myNFTs);
+    }
+
+    // get all my listed NFTs
+    function getMyListedNFTs() public view returns(NFT[] memory){
+        uint myListedNFTCount = 0;
+        for (uint i = 0; i < nftCount; i++){
+            if( nfts[i].seller == msg.sender && !nfts[i].isSold){
+                myListedNFTCount++;
+            }
+        }
+
+        NFT[] memory myListedNFTs = new NFT[](myListedNFTCount);
+        uint nftIndex = 0;
+        for (uint i = 0; i < nftCount; i++){
+            if( nfts[i].seller == msg.sender && !nfts[i].isSold){
+                myListedNFTs[nftIndex] = nfts[i];
+                nftIndex++;
+            }
+        }
+        return(myListedNFTs);
     }
 }
