@@ -40,7 +40,7 @@ contract Marketplace is ReentrancyGuard{
         marketOwner = payable(msg.sender);
         feePercent = _feePercent;
     }
-    
+
     // list nft on marketplace
     function listNFT(IERC721 _nftContract, uint _tokenId, uint _price) 
     external 
@@ -126,5 +126,15 @@ contract Marketplace is ReentrancyGuard{
     public 
     returns(uint){
         return(nfts[_tokenId].price*(100+feePercent));
+    }
+
+    function getListedNFTs() public view returns (NFT[] memory){
+        uint unsoldNFTCount = nftCount - nftSold;
+
+        NFT[] memory unsoldNFTs = new NFT[](unsoldNFTCount);
+        uint nftIndex = 0;
+        for (uint i = 0; i < nftCount; i++){
+            if( nfts[])
+        }
     }
 }
