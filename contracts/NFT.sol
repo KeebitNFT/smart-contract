@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract NFT is ERC721URIStorage{
-    uint public tokenCount;
+    uint public tokenCount = 0;
     address marketplaceContract;
 
     constructor(address _marketplaceContract) ERC721("Keebit NFT", "Keebit"){
