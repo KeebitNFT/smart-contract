@@ -123,14 +123,17 @@ contract Marketplace is ReentrancyGuard{
 
     // total = nft price + transaction fee
     function getTotalPrice(uint _tokenId) 
-    view 
-    public 
+    internal
+    view  
     returns(uint){
         return(nfts[_tokenId].price*(100+feePercent));
     }
 
     // get all unsold NFTs listed on the marketplace
-    function getListedNFTs() public view returns (NFT[] memory){
+    function getListedNFTs() 
+    external 
+    view  
+    returns (NFT[] memory){
         uint unsoldNFTCount = nftCount - nftSold;
 
         NFT[] memory unsoldNFTs = new NFT[](unsoldNFTCount);
@@ -145,7 +148,10 @@ contract Marketplace is ReentrancyGuard{
     }
 
     // get all my NFTs
-    function getMyNFTs() public view returns (NFT[] memory){
+    function getMyNFTs() 
+    external 
+    view 
+    returns (NFT[] memory){
         uint myNFTCount = 0;
         for (uint i = 0; i < nftCount; i++){
             if( nfts[i].owner == msg.sender){
@@ -165,7 +171,10 @@ contract Marketplace is ReentrancyGuard{
     }
 
     // get all my listed NFTs
-    function getMyListedNFTs() public view returns(NFT[] memory){
+    function getMyListedNFTs() 
+    external 
+    view 
+    returns(NFT[] memory){
         uint myListedNFTCount = 0;
         for (uint i = 0; i < nftCount; i++){
             if( nfts[i].seller == msg.sender && !nfts[i].isSold){
