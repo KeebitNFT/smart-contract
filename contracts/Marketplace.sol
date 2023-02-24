@@ -6,12 +6,13 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract Marketplace is ReentrancyGuard{
-    uint private nftCount;
-    uint private nftSold;
+    uint private itemCount;
+    uint private itemSold;
     address payable public immutable marketOwner;
     uint public immutable feePercent; // transaction fee, no listing fee
 
     struct NFT{
+        uint itemId;
         IERC721 nftContract;
         uint tokenId;
         uint price;
@@ -22,6 +23,7 @@ contract Marketplace is ReentrancyGuard{
     mapping(uint => NFT) public nfts;
 
     event NFTListed(
+        uint itemId,
         IERC721 nftContract,
         uint tokenId,
         uint price,
@@ -29,6 +31,7 @@ contract Marketplace is ReentrancyGuard{
         address indexed owner
     );
     event NFTSold(
+        uint itemId,
         IERC721 nftContract,
         uint tokenId,
         uint price,
@@ -47,8 +50,10 @@ contract Marketplace is ReentrancyGuard{
     nonReentrant{
         require(_price > 0, "Price must be at least 1 wei");
         _nftContract.transferFrom(msg.sender, address(this), _tokenId);
-        nftCount++;
-        nfts[_tokenId] = NFT(
+        itemCount++;
+        // set itemCount as key
+        nfts[itemCount] = NFT(
+            itemCount,
             _nftContract,
             _tokenId,
             _price,
@@ -57,6 +62,7 @@ contract Marketplace is ReentrancyGuard{
             false
         );
         emit NFTListed(
+            itemCount,
             _nftContract, 
             _tokenId, 
             _price, 
@@ -67,13 +73,13 @@ contract Marketplace is ReentrancyGuard{
     }
 
     //buy nft
-    function buyNFT(uint _tokenId) 
+    function buyNFT(uint _itemId) 
     external 
     payable 
     nonReentrant{
-        uint _totalPrice = getTotalPrice(_tokenId);
-        NFT storage nft = nfts[_tokenId];
-        require(_tokenId > 0 && _tokenId <= nftCount, "item doesn't exist");
+        uint _totalPrice = _getTotalPrice(_itemId);
+        NFT storage nft = nfts[_itemId];
+        require(_itemId > 0 && _itemId <= itemCount, "item doesn't exist");
         require(msg.value >= _totalPrice, "not enough ether for this transaction");
         require(!nft.isSold, "item is already sold");
         //pay seller and marketOwner
@@ -86,8 +92,9 @@ contract Marketplace is ReentrancyGuard{
         nft.owner = buyer;
         nft.isSold = true;
 
-        nftSold++;
+        itemSold++;
         emit NFTSold(
+            _itemId,
             nft.nftContract, 
             nft.tokenId, 
             msg.value,
@@ -98,23 +105,23 @@ contract Marketplace is ReentrancyGuard{
     }
 
     // resell nft purchased from marketplace
-    function relistNFT(IERC721 _nftContract, uint _tokenId, uint _price) 
+    function relistNFT(IERC721 _nftContract, uint _itemId, uint _price) 
     external 
     payable 
     nonReentrant{
         require(_price > 0, "Price must be at least 1 wei");
-        _nftContract.transferFrom(msg.sender, address(this), _tokenId);
-        nftSold--;
-
-        NFT storage nft = nfts[_tokenId];
+        NFT storage nft = nfts[_itemId];
+        _nftContract.transferFrom(msg.sender, address(this), nft.tokenId);
+        itemSold--;
         nft.seller = payable(msg.sender);
         nft.owner = payable(address(this));
         nft.isSold = false;
         nft.price = _price;
 
         emit NFTListed(
+            itemCount,
             _nftContract, 
-            _tokenId, 
+            _itemId, 
             _price, 
             msg.sender,
             address(this)
@@ -122,11 +129,11 @@ contract Marketplace is ReentrancyGuard{
     }
 
     // total = nft price + transaction fee
-    function getTotalPrice(uint _tokenId) 
+    function _getTotalPrice(uint _itemId) 
     internal
     view  
     returns(uint){
-        return(nfts[_tokenId].price*(100+feePercent));
+        return(nfts[_itemId].price*(100+feePercent));
     }
 
     // get all unsold NFTs listed on the marketplace
@@ -134,13 +141,13 @@ contract Marketplace is ReentrancyGuard{
     external 
     view  
     returns (NFT[] memory){
-        uint unsoldNFTCount = nftCount - nftSold;
+        uint unsoldNFTCount = itemCount - itemSold;
 
         NFT[] memory unsoldNFTs = new NFT[](unsoldNFTCount);
         uint nftIndex = 0;
-        for (uint i = 0; i < nftCount; i++){
-            if( !nfts[i].isSold){
-                unsoldNFTs[nftIndex] = nfts[i];
+        for (uint i = 0; i < itemCount; i++){
+            if( !nfts[i+1].isSold){
+                unsoldNFTs[nftIndex] = nfts[i+1];
                 nftIndex++;
             }
         }
@@ -153,17 +160,17 @@ contract Marketplace is ReentrancyGuard{
     view 
     returns (NFT[] memory){
         uint myNFTCount = 0;
-        for (uint i = 0; i < nftCount; i++){
-            if( nfts[i].owner == msg.sender){
+        for (uint i = 0; i < itemCount; i++){
+            if( nfts[i+1].owner == msg.sender){
                 myNFTCount++;
             }
         }
 
         NFT[] memory myNFTs = new NFT[](myNFTCount);
         uint nftIndex = 0;
-        for (uint i = 0; i < nftCount; i++){
-            if( nfts[i].owner == msg.sender){
-                myNFTs[nftIndex] = nfts[i];
+        for (uint i = 0; i < itemCount; i++){
+            if( nfts[i+1].owner == msg.sender){
+                myNFTs[nftIndex] = nfts[i+1];
                 nftIndex++;
             }
         }
@@ -176,17 +183,17 @@ contract Marketplace is ReentrancyGuard{
     view 
     returns(NFT[] memory){
         uint myListedNFTCount = 0;
-        for (uint i = 0; i < nftCount; i++){
-            if( nfts[i].seller == msg.sender && !nfts[i].isSold){
+        for (uint i = 0; i < itemCount; i++){
+            if( nfts[i+1].seller == msg.sender && !nfts[i+1].isSold){
                 myListedNFTCount++;
             }
         }
 
         NFT[] memory myListedNFTs = new NFT[](myListedNFTCount);
         uint nftIndex = 0;
-        for (uint i = 0; i < nftCount; i++){
-            if( nfts[i].seller == msg.sender && !nfts[i].isSold){
-                myListedNFTs[nftIndex] = nfts[i];
+        for (uint i = 0; i < itemCount; i++){
+            if( nfts[i+1].seller == msg.sender && !nfts[i+1].isSold){
+                myListedNFTs[nftIndex] = nfts[i+1];
                 nftIndex++;
             }
         }
