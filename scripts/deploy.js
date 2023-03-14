@@ -8,9 +8,9 @@ async function main() {
   const marketplace = await Marketplace.deploy(5); // specify argument _feePercent
   await marketplace.deployed();
 
-  const NFT = await ethers.getContractFactory("NFT");
-  const nft = await Marketplace.deploy();
-  await nft.deployed();
+  // const NFT = await ethers.getContractFactory("NFT");
+  // const nft = await Marketplace.deploy();
+  // await nft.deployed();
 
   console.log("Deployed contracts to", deployer.address);
   console.log("Account balance:", (await deployer.getBalance()).toString());
