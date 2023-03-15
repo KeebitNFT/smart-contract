@@ -15,45 +15,45 @@ contract Token is ERC1155, Ownable{
     // 1 collection can have multiple tokens, represented by ids
     // 1 collection shares 1 base URI, each token in a collection has a unique URI: base URI + token id
     constructor(
-        string memory contractName, 
-        string memory uri, 
-        uint[] memory ids
-    )ERC1155(uri){
-        ids = ids;
-        setURI(uri);
-        baseMetadataURI = uri;
-        tokenName = contractName;
+        string memory _contractName, 
+        string memory _uri, 
+        uint[] memory _ids
+    )ERC1155(_uri){
+        ids = _ids;
+        setURI(_uri);
+        baseMetadataURI = _uri;
+        tokenName = _contractName;
         transferOwnership(tx.origin);
     }
 
-    function setURI(string memory uri) 
+    function setURI(string memory _uri) 
     public 
     onlyOwner{
-        _setURI(uri);
+        _setURI(_uri);
     }
 
-    function setMintFee(uint fee) 
+    function setMintFee(uint _fee) 
     public 
     onlyOwner{
-        mintFee = fee;
+        mintFee = _fee;
     }
 
     function mintBatch(
-        address account,
-        uint256[] memory ids
+        address _account,
+        uint256[] memory _ids
     )
     public
     payable
     returns(uint256[] memory)
     {
-        require(msg.value == mintFee*ids.length);
+        require(msg.value == mintFee);
         // amount of all token id = 1
-        uint256[] memory amounts = new uint256[](ids.length);
-        for(uint i=0; i<ids.length; i++){
+        uint256[] memory amounts = new uint256[](_ids.length);
+        for(uint i=0; i<_ids.length; i++){
             amounts[i] = 1;
         }
-        _mintBatch(account, ids, amounts,"");
-        return ids;
+        _mintBatch(_account, _ids, amounts,"");
+        return _ids;
     }
 }
 
