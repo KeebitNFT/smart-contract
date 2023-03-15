@@ -15,22 +15,25 @@ contract Token is ERC1155, Ownable{
     mapping(string => uint) public nameToId; //name to id mapping
     mapping(uint => string) public idToName; //id to name mapping
 
+    // 1 contract = 1 collection
+    // 1 collection can have multiple tokens, represented by names -> ids
+    // 1 collection shares 1 base URI, each token in a collection has a unique URI: base URI + token id
     constructor(
-        string memory _contractName, 
-        string memory _uri, 
-        string[] memory _names, 
-        uint[] memory _ids
-    )ERC1155(_uri){
-        names = _names;
-        ids = _ids;
-        createMapping();
-        setURI(_uri);
-        baseMetadataURI = _uri;
-        tokenName = _contractName;
+        string memory contractName, 
+        string memory uri, 
+        string[] memory names, 
+        uint[] memory ids
+    )ERC1155(uri){
+        names = names;
+        ids = ids;
+        _createMapping();
+        setURI(uri);
+        baseMetadataURI = uri;
+        tokenName = contractName;
         transferOwnership(tx.origin);
     }
 
-    function createMapping() 
+    function _createMapping() 
     private{
         for (uint id = 0; id < ids.length; id++) {
             nameToId[names[id]] = ids[id];
@@ -49,7 +52,7 @@ contract Token is ERC1155, Ownable{
     onlyOwner{
         mintFee = fee;
     }
-
+    // amount = 1
     function mint(
         address account,
         uint256 id,
