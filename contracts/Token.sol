@@ -12,7 +12,7 @@ contract Token is ERC1155, Ownable{
     uint public mintFee = 0 wei; //mintfee, 0 by default. only used in mint function, not batch.
 
     // 1 contract = 1 collection
-    // 1 collection can have multiple tokens, represented by names -> ids
+    // 1 collection can have multiple tokens, represented by ids
     // 1 collection shares 1 base URI, each token in a collection has a unique URI: base URI + token id
     constructor(
         string memory contractName, 
@@ -38,31 +38,34 @@ contract Token is ERC1155, Ownable{
         mintFee = fee;
     }
     // amount = 1
-    function mint(
-        address account,
-        uint256 id,
-        uint256 amount 
-    )
-    public
-    payable 
-    returns(uint256){
-        require(msg.value == mintFee);
-        //_mint(address account, uint256 id, uint256 amount, bytes data)
-        _mint(account, id, amount, "");
-        return id;
-    }
+    // function mint(
+    //     address account,
+    //     uint256 id,
+    //     uint256 amount 
+    // )
+    // public
+    // payable 
+    // returns(uint256){
+    //     require(msg.value == mintFee);
+    //     //_mint(address account, uint256 id, uint256 amount, bytes data)
+    //     _mint(account, id, amount, "");
+    //     return id;
+    // }
 
     function mintBatch(
         address account,
-        uint256[] memory ids,
-        uint256[] memory amounts
+        uint256[] memory ids
     )
     public
     payable
     returns(uint256[] memory)
     {
         require(msg.value == mintFee*ids.length);
-        // _mintBacth(address to, uint256[] ids, uint256[] amounts, bytes data)
+        // amount of all token id = 1
+        uint256[] memory amounts = new uint256[](ids.length);
+        for(uint i=0; i<ids.length; i++){
+            amounts[i] = 1;
+        }
         _mintBatch(account, ids, amounts,"");
         return ids;
     }
