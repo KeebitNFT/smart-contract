@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 
 contract Marketplace is ReentrancyGuard{
     uint private itemCount;
@@ -13,7 +14,7 @@ contract Marketplace is ReentrancyGuard{
 
     struct NFT{
         uint itemId;
-        IERC721 nftContract;
+        IERC1155 nftContract;
         uint tokenId;
         uint price;
         address payable seller;
@@ -24,7 +25,7 @@ contract Marketplace is ReentrancyGuard{
 
     event NFTListed(
         uint itemId,
-        IERC721 nftContract,
+        IERC1155 nftContract,
         uint tokenId,
         uint price,
         address indexed seller,
@@ -32,7 +33,7 @@ contract Marketplace is ReentrancyGuard{
     );
     event NFTSold(
         uint itemId,
-        IERC721 nftContract,
+        IERC1155 nftContract,
         uint tokenId,
         uint price,
         address indexed seller,
@@ -45,11 +46,11 @@ contract Marketplace is ReentrancyGuard{
     }
 
     // list nft on marketplace
-    function listNFT(IERC721 _nftContract, uint _tokenId, uint _price) 
+    function listNFT(IERC1155 _nftContract, uint _tokenId, uint _price) 
     external 
     nonReentrant{
         require(_price > 0, "Price must be at least 1 wei");
-        _nftContract.transferFrom(msg.sender, address(this), _tokenId);
+        _nftContract.safeTransferFrom(msg.sender, address(this), _tokenId, 1, "");
         itemCount++;
         // set itemCount as key
         nfts[itemCount] = NFT(
@@ -87,7 +88,7 @@ contract Marketplace is ReentrancyGuard{
         marketOwner.transfer(_totalPrice - nft.price);
         //transfer nft to buyer
         address payable buyer = payable(msg.sender);
-        nft.nftContract.transferFrom(address(this), buyer, nft.tokenId);
+        nft.nftContract.safeTransferFrom(address(this), buyer, nft.tokenId, 1, "");
         //update nft info
         nft.owner = buyer;
         nft.isSold = true;
@@ -105,13 +106,13 @@ contract Marketplace is ReentrancyGuard{
     }
 
     // resell nft purchased from marketplace
-    function relistNFT(IERC721 _nftContract, uint _itemId, uint _price) 
+    function relistNFT(IERC1155 _nftContract, uint _itemId, uint _price) 
     external 
     payable 
     nonReentrant{
         require(_price > 0, "Price must be at least 1 wei");
         NFT storage nft = nfts[_itemId];
-        _nftContract.transferFrom(msg.sender, address(this), nft.tokenId);
+        _nftContract.safeTransferFrom(msg.sender, address(this), nft.tokenId, 1, "");
         itemSold--;
         nft.seller = payable(msg.sender);
         nft.owner = payable(address(this));
