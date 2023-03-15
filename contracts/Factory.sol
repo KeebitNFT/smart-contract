@@ -11,30 +11,30 @@ contract Factory{
     event TokenMinted(address owner, address tokenContract, uint amount); //emmited when ERC1155 token is minted
 
     function createNFT(
-        string memory contractName, 
-        string memory uri, 
-        uint[] memory ids
+        string memory _contractName, 
+        string memory _uri, 
+        uint[] memory _ids
     )
     public
     returns(address){
         // deploy contract
-        Token t = new Token(contractName, uri, ids);
+        Token t = new Token(_contractName, _uri, _ids);
         tokens.push(t);
         emit TokenDeployed(msg.sender,address(t));
 
         //mint NFT
-        _mintNFT(t, ids);
+        _mintNFT(t, _ids);
         return address(t);
 
     }
 
     function _mintNFT(
-        Token token,
-        uint[] memory ids
+        Token _token,
+        uint[] memory _ids
         ) 
     private {
-        token.mintBatch(token.owner(), ids);
-        emit TokenMinted(token.owner(), address(token), ids.length);
+        _token.mintBatch(_token.owner(), _ids);
+        emit TokenMinted(_token.owner(), address(_token), _ids.length);
     }
 
 }
