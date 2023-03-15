@@ -37,20 +37,6 @@ contract Token is ERC1155, Ownable{
     onlyOwner{
         mintFee = fee;
     }
-    // amount = 1
-    // function mint(
-    //     address account,
-    //     uint256 id,
-    //     uint256 amount 
-    // )
-    // public
-    // payable 
-    // returns(uint256){
-    //     require(msg.value == mintFee);
-    //     //_mint(address account, uint256 id, uint256 amount, bytes data)
-    //     _mint(account, id, amount, "");
-    //     return id;
-    // }
 
     function mintBatch(
         address account,
