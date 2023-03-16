@@ -18,7 +18,7 @@ contract Factory{
         uint[] memory _ids,
         uint _price
     )
-    public
+    external
     returns(address){
         // deploy contract
         Token tokenContract = new Token(_contractName, _uri, _ids);

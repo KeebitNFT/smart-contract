@@ -9,7 +9,7 @@ contract Token is ERC1155, Ownable{
     uint[] public ids; //uint array of ids
     string public baseMetadataURI; //the token metadata URI
     string public tokenName; //the token mame
-    uint public mintFee = 0 wei; //mintfee, 0 by default. only used in mint function, not batch.
+    uint public mintFee = 0 wei; 
 
     // 1 contract = 1 collection
     // 1 collection can have multiple tokens, represented by ids
@@ -27,7 +27,7 @@ contract Token is ERC1155, Ownable{
     }
 
     function setURI(string memory _uri) 
-    public 
+    internal 
     onlyOwner{
         _setURI(_uri);
     }
@@ -42,7 +42,7 @@ contract Token is ERC1155, Ownable{
         address _account,
         uint256[] memory _ids
     )
-    public
+    external
     payable
     returns(uint256[] memory)
     {

@@ -20,6 +20,7 @@ contract Marketplace is ReentrancyGuard{
         address payable seller;
         address payable owner;
         bool isSold;
+        bool isOfficial;
     }
     mapping(uint => NFT) public nfts;
 
@@ -60,7 +61,8 @@ contract Marketplace is ReentrancyGuard{
             _price,
             payable(msg.sender),
             payable(address(this)),
-            false
+            false,
+            true
         );
         emit NFTListed(
             itemCount,
@@ -118,6 +120,7 @@ contract Marketplace is ReentrancyGuard{
         nft.owner = payable(address(this));
         nft.isSold = false;
         nft.price = _price;
+        nft.isOfficial = false;
 
         emit NFTListed(
             itemCount,
@@ -199,5 +202,14 @@ contract Marketplace is ReentrancyGuard{
             }
         }
         return(myListedNFTs);
+    }
+
+    function updatePrice(uint _itemId, uint _newPrice)
+    external
+    returns (uint)
+    {
+        require(_newPrice > 0, "Price must be at least 1 wei");
+        nfts[_itemId].price = _newPrice;
+        return(_newPrice);
     }
 }
