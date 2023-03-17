@@ -34,6 +34,14 @@ contract Marketplace is ReentrancyGuard{
         address indexed seller,
         address indexed owner
     );
+    event NFTUnlisted(
+        uint itemId,
+        IERC1155 nftContract,
+        uint tokenId,
+        uint price,
+        address indexed seller,
+        address indexed owner
+    );
     event NFTSold(
         uint itemId,
         IERC1155 nftContract,
@@ -132,12 +140,12 @@ contract Marketplace is ReentrancyGuard{
         nft.isOnList = true;
 
         emit NFTListed(
-            itemCount,
+            _itemId,
             _nftContract, 
-            _itemId, 
+            nft.itemId, 
             _price, 
-            msg.sender,
-            address(this)
+            nft.seller,
+            nft.owner
         );
     }
 
@@ -151,10 +159,19 @@ contract Marketplace is ReentrancyGuard{
         _nftContract.safeTransferFrom(address(this), msg.sender, nft.tokenId, 1, "");
         itemOnList--;
 
-        nft.seller = payable(msg.sender);
+        nft.seller = payable(address(this));
         nft.owner = payable(msg.sender);
         nft.isSold = false;
         nft.isOnList = false;
+
+        emit NFTUnlisted(
+        _itemId,
+        _nftContract,
+        nft.tokenId,
+        nft.price,
+        nft.seller,
+        nft.owner
+    );
     }
 
     // total = nft price + transaction fee
