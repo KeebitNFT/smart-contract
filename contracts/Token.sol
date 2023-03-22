@@ -13,7 +13,7 @@ contract Token is ERC1155, Ownable{
 
     // 1 contract = 1 collection
     // 1 collection can have multiple tokens, represented by ids
-    // 1 collection shares 1 base URI, each token in a collection has a unique URI: base URI + token id
+    // 1 collection shares 1 URI
     constructor(
         string memory _contractName, 
         string memory _uri, 
