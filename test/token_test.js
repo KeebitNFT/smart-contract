@@ -6,7 +6,11 @@ describe("Token contract", function () {
   async function deployTokenFixture() {
     const Token = await ethers.getContractFactory("Token");
     const [owner, address1] = await ethers.getSigners();
-    const tokenContract = await Token.deploy();
+    const tokenContract = await Token.deploy(
+      "KeebitCollection",
+      "https://keebit.com/fakeTokenURI/0",
+      [1, 2, 3]
+    );
     await tokenContract.deployed();
     return { tokenContract, owner, address1 };
   }
