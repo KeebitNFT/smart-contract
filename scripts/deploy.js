@@ -13,7 +13,11 @@ async function main() {
   await factory.deployed();
 
   const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy();
+  const token = await Token.deploy(
+    "KeebitCollection",
+    "https://keebit.com/fakeTokenURI/0",
+    [1, 2, 3]
+  );
   await token.deployed();
 
   console.log("Deployed contracts to", deployer.address);
