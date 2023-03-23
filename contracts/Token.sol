@@ -4,25 +4,26 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "hardhat/console.sol";
 
 contract Token is ERC1155, Ownable{
     uint[] public ids; //uint array of ids
     string public baseMetadataURI; //the token metadata URI
-    string public tokenName; //the token mame
+    string public collectionName; //the token mame
     uint public mintFee = 0 wei; 
 
     // 1 contract = 1 collection
     // 1 collection can have multiple tokens, represented by ids
     // 1 collection shares 1 URI
     constructor(
-        string memory _contractName, 
+        string memory _collectionName, 
         string memory _uri, 
         uint[] memory _ids
     )ERC1155(_uri){
         ids = _ids;
         setURI(_uri);
         baseMetadataURI = _uri;
-        tokenName = _contractName;
+        collectionName = _collectionName;
         transferOwnership(tx.origin);
     }
 
@@ -36,6 +37,7 @@ contract Token is ERC1155, Ownable{
     public 
     onlyOwner{
         mintFee = _fee;
+        console.log(mintFee);
     }
 
     function mintBatch(
@@ -44,6 +46,7 @@ contract Token is ERC1155, Ownable{
     )
     external
     payable
+    onlyOwner
     returns(uint256[] memory)
     {
         require(msg.value == mintFee);
