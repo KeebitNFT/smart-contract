@@ -19,7 +19,9 @@ contract Token is ERC1155, Ownable{
         string memory _collectionName, 
         string memory _uri, 
         uint[] memory _ids
-    )ERC1155(_uri){
+    )
+    Ownable()
+    ERC1155(_uri){
         ids = _ids;
         setURI(_uri);
         baseMetadataURI = _uri;
@@ -29,26 +31,30 @@ contract Token is ERC1155, Ownable{
 
     function setURI(string memory _uri) 
     internal 
-    onlyOwner{
+    onlyOwner
+    {
         _setURI(_uri);
     }
 
     function setMintFee(uint _fee) 
     public 
-    onlyOwner{
+    onlyOwner
+    {
         mintFee = _fee;
         console.log(mintFee);
     }
 
     function mintBatch(
         address _account,
-        uint256[] memory _ids
+        uint256[] memory _ids,
+        address market
     )
     external
     payable
-    onlyOwner
     returns(uint256[] memory)
     {
+        console.log("mintBatch() caller: %s", msg.sender);
+        console.log("mintBatch() owner: %s", _account);
         require(msg.value == mintFee);
         // amount of all token id = 1
         uint256[] memory amounts = new uint256[](_ids.length);
@@ -56,6 +62,7 @@ contract Token is ERC1155, Ownable{
             amounts[i] = 1;
         }
         _mintBatch(_account, _ids, amounts,"");
+        setApprovalForAll(address(market), true);
         return _ids;
     }
 }

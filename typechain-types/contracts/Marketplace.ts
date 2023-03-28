@@ -71,9 +71,9 @@ export interface MarketplaceInterface extends utils.Interface {
     "getListedNFTs()": FunctionFragment;
     "getMyListedNFTs()": FunctionFragment;
     "getMyNFTs()": FunctionFragment;
-    "listNFT(address,uint256,uint256)": FunctionFragment;
-    "marketOwner()": FunctionFragment;
+    "listNFT(address,address,uint256,uint256)": FunctionFragment;
     "nfts(uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
     "relistNFT(address,uint256,uint256)": FunctionFragment;
     "unlistNFT(address,uint256)": FunctionFragment;
     "updatePrice(uint256,uint256)": FunctionFragment;
@@ -87,8 +87,8 @@ export interface MarketplaceInterface extends utils.Interface {
       | "getMyListedNFTs"
       | "getMyNFTs"
       | "listNFT"
-      | "marketOwner"
       | "nfts"
+      | "owner"
       | "relistNFT"
       | "unlistNFT"
       | "updatePrice"
@@ -115,18 +115,16 @@ export interface MarketplaceInterface extends utils.Interface {
     functionFragment: "listNFT",
     values: [
       PromiseOrValue<string>,
+      PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "marketOwner",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "nfts",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "relistNFT",
     values: [
@@ -156,11 +154,8 @@ export interface MarketplaceInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "getMyNFTs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "listNFT", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "marketOwner",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "nfts", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "relistNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "unlistNFT", data: BytesLike): Result;
   decodeFunctionResult(
@@ -272,12 +267,11 @@ export interface Marketplace extends BaseContract {
 
     listNFT(
       _nftContract: PromiseOrValue<string>,
+      _contractOwner: PromiseOrValue<string>,
       _tokenId: PromiseOrValue<BigNumberish>,
       _price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    marketOwner(overrides?: CallOverrides): Promise<[string]>;
 
     nfts(
       arg0: PromiseOrValue<BigNumberish>,
@@ -305,6 +299,8 @@ export interface Marketplace extends BaseContract {
         isOnList: boolean;
       }
     >;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
 
     relistNFT(
       _nftContract: PromiseOrValue<string>,
@@ -345,12 +341,11 @@ export interface Marketplace extends BaseContract {
 
   listNFT(
     _nftContract: PromiseOrValue<string>,
+    _contractOwner: PromiseOrValue<string>,
     _tokenId: PromiseOrValue<BigNumberish>,
     _price: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
-
-  marketOwner(overrides?: CallOverrides): Promise<string>;
 
   nfts(
     arg0: PromiseOrValue<BigNumberish>,
@@ -378,6 +373,8 @@ export interface Marketplace extends BaseContract {
       isOnList: boolean;
     }
   >;
+
+  owner(overrides?: CallOverrides): Promise<string>;
 
   relistNFT(
     _nftContract: PromiseOrValue<string>,
@@ -420,12 +417,11 @@ export interface Marketplace extends BaseContract {
 
     listNFT(
       _nftContract: PromiseOrValue<string>,
+      _contractOwner: PromiseOrValue<string>,
       _tokenId: PromiseOrValue<BigNumberish>,
       _price: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    marketOwner(overrides?: CallOverrides): Promise<string>;
 
     nfts(
       arg0: PromiseOrValue<BigNumberish>,
@@ -453,6 +449,8 @@ export interface Marketplace extends BaseContract {
         isOnList: boolean;
       }
     >;
+
+    owner(overrides?: CallOverrides): Promise<string>;
 
     relistNFT(
       _nftContract: PromiseOrValue<string>,
@@ -543,17 +541,18 @@ export interface Marketplace extends BaseContract {
 
     listNFT(
       _nftContract: PromiseOrValue<string>,
+      _contractOwner: PromiseOrValue<string>,
       _tokenId: PromiseOrValue<BigNumberish>,
       _price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    marketOwner(overrides?: CallOverrides): Promise<BigNumber>;
-
     nfts(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     relistNFT(
       _nftContract: PromiseOrValue<string>,
@@ -591,17 +590,18 @@ export interface Marketplace extends BaseContract {
 
     listNFT(
       _nftContract: PromiseOrValue<string>,
+      _contractOwner: PromiseOrValue<string>,
       _tokenId: PromiseOrValue<BigNumberish>,
       _price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    marketOwner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     nfts(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     relistNFT(
       _nftContract: PromiseOrValue<string>,

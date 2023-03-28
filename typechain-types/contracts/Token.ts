@@ -36,7 +36,7 @@ export interface TokenInterface extends utils.Interface {
     "collectionName()": FunctionFragment;
     "ids(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mintBatch(address,uint256[])": FunctionFragment;
+    "mintBatch(address,uint256[],address)": FunctionFragment;
     "mintFee()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -96,7 +96,11 @@ export interface TokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "mintBatch",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>[]]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(functionFragment: "mintFee", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -325,6 +329,7 @@ export interface Token extends BaseContract {
     mintBatch(
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
+      market: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -411,6 +416,7 @@ export interface Token extends BaseContract {
   mintBatch(
     _account: PromiseOrValue<string>,
     _ids: PromiseOrValue<BigNumberish>[],
+    market: PromiseOrValue<string>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -497,6 +503,7 @@ export interface Token extends BaseContract {
     mintBatch(
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
+      market: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
@@ -640,6 +647,7 @@ export interface Token extends BaseContract {
     mintBatch(
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
+      market: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -727,6 +735,7 @@ export interface Token extends BaseContract {
     mintBatch(
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
+      market: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

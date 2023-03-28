@@ -5,12 +5,13 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
+import "hardhat/console.sol";
 
 contract Marketplace is ReentrancyGuard{
     uint private itemCount; // # item ever been listed
     uint private itemOnList; // # item currently listed (have not beem unlisted)
     uint private itemSold;
-    address payable public immutable marketOwner;
+    address payable public immutable owner;
     uint public immutable feePercent; // transaction fee, no listing fee
 
     struct NFT{
@@ -52,16 +53,19 @@ contract Marketplace is ReentrancyGuard{
         );
 
     constructor(uint _feePercent){
-        marketOwner = payable(msg.sender);
+        owner = payable(msg.sender);
         feePercent = _feePercent;
     }
 
     // list nft on marketplace
-    function listNFT(IERC1155 _nftContract, uint _tokenId, uint _price) 
+    function listNFT(IERC1155 _nftContract, address _contractOwner, uint _tokenId, uint _price) 
     external 
     nonReentrant{
         require(_price > 0, "Price must be at least 1 wei");
-        _nftContract.safeTransferFrom(msg.sender, address(this), _tokenId, 1, "");
+        console.log("listNFT() caller: %s", msg.sender);
+        console.log("_contractOwner: %s", _contractOwner);
+        // console.log("owner: %s", _nftContract.ownerOf(_tokenId));
+        _nftContract.safeTransferFrom(_contractOwner, address(this), _tokenId, 1, "");
         itemCount++;
         itemOnList++;
         // set itemCount as key
@@ -97,9 +101,9 @@ contract Marketplace is ReentrancyGuard{
         require(_itemId > 0 && _itemId <= itemCount, "item doesn't exist");
         require(msg.value >= _totalPrice, "not enough ether for this transaction");
         require(!nft.isSold, "item is already sold");
-        //pay seller and marketOwner
+        //pay seller and owner
         nft.seller.transfer(nft.price);
-        marketOwner.transfer(_totalPrice - nft.price);
+        owner.transfer(_totalPrice - nft.price);
         //transfer nft to buyer
         address payable buyer = payable(msg.sender);
         nft.nftContract.safeTransferFrom(address(this), buyer, nft.tokenId, 1, "");
