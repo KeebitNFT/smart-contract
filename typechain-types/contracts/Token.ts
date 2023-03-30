@@ -34,9 +34,10 @@ export interface TokenInterface extends utils.Interface {
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
     "baseMetadataURI()": FunctionFragment;
     "collectionName()": FunctionFragment;
+    "grantApprovalToFactory(address)": FunctionFragment;
     "ids(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mintBatch(address,uint256[],address)": FunctionFragment;
+    "mintBatch(address,uint256[],address,address)": FunctionFragment;
     "mintFee()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -55,6 +56,7 @@ export interface TokenInterface extends utils.Interface {
       | "balanceOfBatch"
       | "baseMetadataURI"
       | "collectionName"
+      | "grantApprovalToFactory"
       | "ids"
       | "isApprovedForAll"
       | "mintBatch"
@@ -87,6 +89,10 @@ export interface TokenInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "grantApprovalToFactory",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "ids",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -99,6 +105,7 @@ export interface TokenInterface extends utils.Interface {
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<string>,
       PromiseOrValue<string>
     ]
   ): string;
@@ -160,6 +167,10 @@ export interface TokenInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "collectionName",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "grantApprovalToFactory",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "ids", data: BytesLike): Result;
@@ -315,6 +326,11 @@ export interface Token extends BaseContract {
 
     collectionName(overrides?: CallOverrides): Promise<[string]>;
 
+    grantApprovalToFactory(
+      factoryAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     ids(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -330,6 +346,7 @@ export interface Token extends BaseContract {
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       market: PromiseOrValue<string>,
+      factory: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -402,6 +419,11 @@ export interface Token extends BaseContract {
 
   collectionName(overrides?: CallOverrides): Promise<string>;
 
+  grantApprovalToFactory(
+    factoryAddress: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   ids(
     arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -417,6 +439,7 @@ export interface Token extends BaseContract {
     _account: PromiseOrValue<string>,
     _ids: PromiseOrValue<BigNumberish>[],
     market: PromiseOrValue<string>,
+    factory: PromiseOrValue<string>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -489,6 +512,11 @@ export interface Token extends BaseContract {
 
     collectionName(overrides?: CallOverrides): Promise<string>;
 
+    grantApprovalToFactory(
+      factoryAddress: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     ids(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -504,6 +532,7 @@ export interface Token extends BaseContract {
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       market: PromiseOrValue<string>,
+      factory: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
@@ -633,6 +662,11 @@ export interface Token extends BaseContract {
 
     collectionName(overrides?: CallOverrides): Promise<BigNumber>;
 
+    grantApprovalToFactory(
+      factoryAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     ids(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -648,6 +682,7 @@ export interface Token extends BaseContract {
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       market: PromiseOrValue<string>,
+      factory: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -721,6 +756,11 @@ export interface Token extends BaseContract {
 
     collectionName(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    grantApprovalToFactory(
+      factoryAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     ids(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -736,6 +776,7 @@ export interface Token extends BaseContract {
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       market: PromiseOrValue<string>,
+      factory: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
