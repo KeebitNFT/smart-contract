@@ -26,6 +26,7 @@ describe("Token contract", function () {
   describe("Deployment", function () {
     it("Should set uri when deployed by the contract owner", async function () {
       const { tokenContract, owner } = await loadFixture(deployTokenFixture);
+      // call get uri function from erc1155
       expect((await tokenContract.baseMetadataURI()).toString()).to.equal(uri);
     });
 

@@ -8,8 +8,7 @@ import "hardhat/console.sol";
 
 contract Token is ERC1155, Ownable{
     uint[] public ids; //uint array of ids
-    string public baseMetadataURI; //the token metadata URI
-    string public collectionName; //the token mame
+    string public collectionName; //the token name
     uint public mintFee = 0 wei; 
 
     // 1 contract = 1 collection
@@ -23,17 +22,8 @@ contract Token is ERC1155, Ownable{
     Ownable()
     ERC1155(_uri){
         ids = _ids;
-        setURI(_uri);
-        baseMetadataURI = _uri;
         collectionName = _collectionName;
-        transferOwnership(tx.origin);
-    }
-
-    function setURI(string memory _uri) 
-    internal 
-    onlyOwner
-    {
-        _setURI(_uri);
+        // transferOwnership(msg.sender);
     }
 
     function setMintFee(uint _fee) 
@@ -46,11 +36,11 @@ contract Token is ERC1155, Ownable{
 
     function mintBatch(
         address _account,
-        uint256[] memory _ids,
-        address market
+        uint256[] memory _ids
     )
     external
     payable
+    onlyOwner
     returns(uint256[] memory)
     {
         console.log("mintBatch() caller: %s", msg.sender);
@@ -62,8 +52,8 @@ contract Token is ERC1155, Ownable{
             amounts[i] = 1;
         }
         _mintBatch(_account, _ids, amounts,"");
-        setApprovalForAll(address(market), true);
         return _ids;
     }
+
 }
 
