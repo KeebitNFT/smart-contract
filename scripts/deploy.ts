@@ -9,7 +9,7 @@ async function main() {
   await marketplace.deployed();
 
   const Factory = await ethers.getContractFactory("Factory");
-  const factory = await Factory.deploy(marketplace.address, {});
+  const factory = await Factory.deploy();
   await factory.deployed();
 
   console.log("Deployed contracts to", deployer.address);

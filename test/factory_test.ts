@@ -1,8 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
-import { token } from "../typechain-types/@openzeppelin/contracts";
-const uri = "https://keebit.com/token/1";
 
 describe("Factory contract", function () {
   async function deployFactoryFixture() {
