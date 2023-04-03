@@ -11,7 +11,14 @@ contract Factory {
     Token[] public tokens;
     mapping(Token => bool) public isToken;
     mapping(address => bool) public isVendor;
-    mapping(address => bool) public isPeer;
+
+    struct factoryNFT{
+        address tokenAddress;
+        string collectionName;
+        string uri;
+        uint tokenId;
+    }
+    mapping(uint => factoryNFT) public myNFTs;
 
     event TokenDeployed(address owner, address tokenContract); //emitted when ERC1155 token is deployed
     event TokenMinted(address owner, address tokenContract, uint amount); //emmited when ERC1155 token is minted
@@ -20,13 +27,7 @@ contract Factory {
     function saveVendor(address _vendor) 
     external{
         isVendor[_vendor] = true;
-    }
-
-    /// add restriction to keebit frontend
-    function savePeer(address _peer)
-    external{
-        isPeer[_peer] = true;
-    }   
+    }  
 
     function createNFT(
         string memory _contractName, 
@@ -68,15 +69,39 @@ contract Factory {
         emit TokenMinted(msg.sender, address(_token), _ids.length);
     }
 
-    function getMyNFTs()
+    function getMyNFT()
     external
-    view
-    returns(address[] memory){
+    returns(factoryNFT[] memory){
+        uint myNFTCount = 0;
+        factoryNFT[] memory myNFTArray;
         for(uint i=0;i<tokens.length;i++){
-            tokens[i].balanceOf(msg.sender, 0);
+            // create array of accounts and ids
+            uint num = tokens[i].countNFT();
+            address[] memory owners = new address[](num);
+            uint[] memory ids = new uint[](num);
+            for(uint j=0;j<num;j++){
+                owners[j] = msg.sender;
+                ids[j] = j+1; // id starts from 1
+            }
+            // get balance of all ids
+            uint[] memory balance = tokens[i].balanceOfBatch(owners,ids);
+
+            for(uint k=0;k<balance.length;k++){
+                if(balance[k] > 0){
+                    myNFTs[myNFTCount] = factoryNFT(
+                        address(tokens[i]),
+                        tokens[i].collectionName(),
+                        tokens[i].uri(1),
+                        k+1
+                    );
+                    myNFTArray[myNFTCount] = myNFTs[myNFTCount];
+                    myNFTCount++;
+                }
+            }
+
             
         }
-        return ;
+        return(myNFTArray) ;
     }
 
     

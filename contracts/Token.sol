@@ -55,5 +55,12 @@ contract Token is ERC1155, Ownable{
         return _ids;
     }
 
+    function countNFT()
+    external
+    view
+    returns (uint){
+        return ids.length;
+    }
+
 }
 
