@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./Token.sol";
 import "hardhat/console.sol";
 
-contract Factory {
+contract Factory is Ownable{
 
     Token[] public tokens;
     mapping(Token => bool) public isToken;
@@ -22,10 +22,10 @@ contract Factory {
 
     event TokenDeployed(address owner, address tokenContract); //emitted when ERC1155 token is deployed
     event TokenMinted(address owner, address tokenContract, uint amount); //emmited when ERC1155 token is minted
-
-    // add restriction to keebit frontend
+    
     function saveVendor(address _vendor) 
-    external{
+    external
+    onlyOwner{
         isVendor[_vendor] = true;
     }  
 
@@ -97,7 +97,7 @@ contract Factory {
                     myNFTArray[myNFTCount] = myNFTs[myNFTCount];
                     myNFTCount++;
                 }
-            } 
+            }  
         }
         return(myNFTArray) ;
     }
