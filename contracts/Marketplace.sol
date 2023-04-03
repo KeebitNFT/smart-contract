@@ -15,9 +15,10 @@ contract Marketplace is ReentrancyGuard{
     uint public immutable feePercent; // transaction fee, no listing fee
     Factory public factory;
 
-    struct NFT{
+    struct MarketNFT{
         uint itemId;
         Token nftContract;
+        string collectionName;
         uint tokenId;
         uint price;
         address payable seller;
@@ -25,11 +26,12 @@ contract Marketplace is ReentrancyGuard{
         bool isOfficial;
         bool isOnList;
     }
-    mapping(uint => NFT) public nfts;
+    mapping(uint => MarketNFT) public nfts;
 
     event NFTListed(
         uint itemId,
         Token nftContract,
+        string collectionName,
         uint tokenId,
         uint price,
         address indexed seller,
@@ -38,6 +40,7 @@ contract Marketplace is ReentrancyGuard{
     event NFTUnlisted(
         uint itemId,
         Token nftContract,
+        string collectionName,
         uint tokenId,
         uint price,
         address indexed seller,
@@ -46,6 +49,7 @@ contract Marketplace is ReentrancyGuard{
     event NFTSold(
         uint itemId,
         Token nftContract,
+        string collectionName,
         uint tokenId,
         uint price,
         address indexed seller,
@@ -64,7 +68,6 @@ contract Marketplace is ReentrancyGuard{
     nonReentrant
     returns(address){
         require(factory.isToken(_nftContract), "Only a valid token contract can be listed");
-        require(factory.isVendor(msg.sender) || factory.isPeer(msg.sender), "Only valid accounts can list NFT");
         require(_tokenIds.length > 0, "No token id provided");
         require(_price > 0, "Price must be at least 1 wei");
 
@@ -82,11 +85,12 @@ contract Marketplace is ReentrancyGuard{
         itemCount++;
         itemOnList++;
         // check if lister is vendor or peer
-        bool _isOfficial = factory.isVendor(msg.sender) ? true : false;
+        bool _isOfficial = factory.isVendor(msg.sender);
         bool _isOnlist = true;
-        nfts[itemCount] = NFT(
+        nfts[itemCount] = MarketNFT(
             itemCount,
             _nftContract,
+            _nftContract.collectionName(),
             _tokenId,
             _price,
             payable(msg.sender),
@@ -96,7 +100,8 @@ contract Marketplace is ReentrancyGuard{
         );
         emit NFTListed(
             itemCount,
-            _nftContract, 
+            _nftContract,
+            _nftContract.collectionName(), 
             _tokenId, 
             _price, 
             msg.sender,
@@ -111,7 +116,7 @@ contract Marketplace is ReentrancyGuard{
     payable 
     nonReentrant{
         uint _totalPrice = _getTotalPrice(_itemId);
-        NFT storage nft = nfts[_itemId];
+        MarketNFT storage nft = nfts[_itemId];
         require(_itemId > 0 && _itemId <= itemCount, "item doesn't exist");
         require(nft.isOnList, "item is not for sale");
         require(msg.value >= _totalPrice, "not enough ether for this transaction");
@@ -129,6 +134,7 @@ contract Marketplace is ReentrancyGuard{
         emit NFTSold(
             _itemId,
             nft.nftContract, 
+            nft.nftContract.collectionName(),
             nft.tokenId, 
             msg.value,
             nft.seller,
@@ -141,7 +147,7 @@ contract Marketplace is ReentrancyGuard{
     payable
     external
     nonReentrant{
-        NFT storage nft = nfts[_itemId];
+        MarketNFT storage nft = nfts[_itemId];
         require(nft.isOnList, "item is not listed");
         _nftContract.safeTransferFrom(address(this), msg.sender, nft.tokenId, 1, "");
         itemOnList--;
@@ -153,6 +159,7 @@ contract Marketplace is ReentrancyGuard{
         emit NFTUnlisted(
         _itemId,
         _nftContract,
+        _nftContract.collectionName(),
         nft.tokenId,
         nft.price,
         nft.seller,
@@ -172,9 +179,9 @@ contract Marketplace is ReentrancyGuard{
     function getListedNFTs() 
     external 
     view  
-    returns (NFT[] memory){
+    returns (MarketNFT[] memory){
 
-        NFT[] memory listedNFTs = new NFT[](itemOnList);
+        MarketNFT[] memory listedNFTs = new MarketNFT[](itemOnList);
         uint nftIndex = 0;
         for (uint i = 0; i < itemCount; i++){
             if(nfts[i+1].isOnList){
@@ -185,35 +192,10 @@ contract Marketplace is ReentrancyGuard{
         return(listedNFTs);
     }
 
-    // get all my NFTs
-    // move to Factory
-    // function getMyNFTs() 
-    // external 
-    // view 
-    // returns (NFT[] memory){
-    //     uint myNFTCount = 0;
-    //     for (uint i = 0; i < itemCount; i++){
-    //         if( nfts[i+1].owner == msg.sender){
-    //             myNFTCount++;
-    //         }
-    //     }
-
-    //     NFT[] memory myNFTs = new NFT[](myNFTCount);
-    //     uint nftIndex = 0;
-    //     for (uint i = 0; i < itemCount; i++){
-    //         if( nfts[i+1].owner == msg.sender){
-    //             myNFTs[nftIndex] = nfts[i+1];
-    //             nftIndex++;
-    //         }
-    //     }
-    //     return(myNFTs);
-    // }
-
-    // get all my listed NFTs
     function getMyListedNFTs() 
     external 
     view 
-    returns(NFT[] memory){
+    returns(MarketNFT[] memory){
         uint myListedNFTCount = 0;
         for (uint i = 0; i < itemCount; i++){
             if( nfts[i+1].seller == msg.sender && nfts[i+1].isOnList){
@@ -221,7 +203,7 @@ contract Marketplace is ReentrancyGuard{
             }
         }
 
-        NFT[] memory myListedNFTs = new NFT[](myListedNFTCount);
+        MarketNFT[] memory myListedNFTs = new MarketNFT[](myListedNFTCount);
         uint nftIndex = 0;
         for (uint i = 0; i < itemCount; i++){
             if( nfts[i+1].seller == msg.sender && nfts[i+1].isOnList){
