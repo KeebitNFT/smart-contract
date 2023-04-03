@@ -97,9 +97,7 @@ contract Factory {
                     myNFTArray[myNFTCount] = myNFTs[myNFTCount];
                     myNFTCount++;
                 }
-            }
-
-            
+            } 
         }
         return(myNFTArray) ;
     }

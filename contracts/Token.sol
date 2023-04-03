@@ -23,7 +23,6 @@ contract Token is ERC1155, Ownable{
     ERC1155(_uri){
         ids = _ids;
         collectionName = _collectionName;
-        // transferOwnership(msg.sender);
     }
 
     function setMintFee(uint _fee) 
@@ -46,10 +45,10 @@ contract Token is ERC1155, Ownable{
         console.log("mintBatch() caller: %s", msg.sender);
         console.log("mintBatch() owner: %s", _account);
         require(msg.value == mintFee);
-        // amount of all token id = 1
+
         uint256[] memory amounts = new uint256[](_ids.length);
         for(uint i=0; i<_ids.length; i++){
-            amounts[i] = 1;
+            amounts[i] = 1; // amount of all token id = 1
         }
         _mintBatch(_account, _ids, amounts,"");
         return _ids;
