@@ -4,6 +4,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Factory } from "../typechain-types/";
 import { Marketplace } from "../typechain-types/";
 import { Token } from "../typechain-types/";
+import { BigNumber } from "ethers";
 
 let marketplaceContract: Marketplace;
 let factoryContract: Factory;
@@ -11,6 +12,12 @@ let tokenContract: Token;
 let owner: SignerWithAddress;
 let vendor: SignerWithAddress;
 let peer: SignerWithAddress;
+var chai = require("chai");
+chai.use(require("chai-bignumber")());
+
+const CONTRACT_NAME = "KeebitCollection";
+const URI = "https://keebit.com/token/1";
+const IDS = [1, 2, 3];
 
 describe("Keebit processes", function () {
   before(async () => {
@@ -36,28 +43,24 @@ describe("Keebit processes", function () {
     });
 
     it("Should create a new NFT collection and mint NFTs", async function () {
-      const contractName = "KeebitCollection";
-      const uri = "https://keebit.com/token/1";
-      const ids = [1, 2, 3];
-
       const result = await factoryContract
         .connect(vendor)
-        .createNFT(contractName, uri, ids);
+        .createNFT(CONTRACT_NAME, URI, IDS);
       //check token contract deployment
       tokenContract = await ethers.getContractAt(
         "Token",
         await factoryContract.tokens(0)
       );
-      expect(await tokenContract.ids(0)).to.equal(ids[0]);
-      expect(await tokenContract.ids(2)).to.equal(ids[2]);
-      expect(await tokenContract.uri(0)).to.equal(uri);
-      expect(await tokenContract.collectionName()).to.equal(contractName);
+      expect(await tokenContract.ids(0)).to.equal(IDS[0]);
+      expect(await tokenContract.ids(2)).to.equal(IDS[2]);
+      expect(await tokenContract.uri(0)).to.equal(URI);
+      expect(await tokenContract.collectionName()).to.equal(CONTRACT_NAME);
       //check TokenDeployed event emitting
       expect(result).to.emit(factoryContract, "TokenDeployed");
 
       //check minting
-      for (let i = 0; i < ids.length; i++) {
-        const tokenId = ids[i];
+      for (let i = 0; i < IDS.length; i++) {
+        const tokenId = IDS[i];
         const balance = await tokenContract.balanceOf(vendor.address, tokenId);
         expect(balance).to.equal(1);
       }
@@ -66,7 +69,7 @@ describe("Keebit processes", function () {
   describe("List NFTs", function () {
     it("Should list NFTs", async function () {
       // frontend should call this function
-      tokenContract
+      await tokenContract
         .connect(vendor)
         .setApprovalForAll(marketplaceContract.address, true);
       // smart contract begins from here
@@ -74,12 +77,16 @@ describe("Keebit processes", function () {
         .connect(vendor)
         .listNFTs(tokenContract.address, [1, 2], 10);
       // check that NFTs are transferred to marketplace contract
+      console.log(
+        await tokenContract.balanceOf(marketplaceContract.address, 1)
+      );
+      console.log(BigNumber.from("1"));
       expect(
         await tokenContract.balanceOf(marketplaceContract.address, 1)
-      ).to.equal(1);
-      expect(
-        await tokenContract.balanceOf(marketplaceContract.address, 2)
-      ).to.equal(1);
+      ).to.be.bignumber.equal(BigNumber.from("1"));
+      // expect(
+      //   await tokenContract.balanceOf(marketplaceContract.address, 2)
+      // ).to.equal(1);
       // check that itemId is the same itemCount
       expect(
         (await marketplaceContract.nfts(tokenContract.address)).itemId

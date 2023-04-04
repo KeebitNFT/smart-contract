@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/amita/Code/Keebit/smart-contract/contracts/Factory.sol": {
-      "lastModificationDate": 1680617995221,
-      "contentHash": "fa6cc0b45af7c74d19b9eacf8660a068",
+      "lastModificationDate": 1680630395183,
+      "contentHash": "73eb50e7f7dc881871366eaadcdfecb9",
       "sourceName": "contracts/Factory.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -521,8 +521,8 @@
       ]
     },
     "/Users/amita/Code/Keebit/smart-contract/contracts/Marketplace.sol": {
-      "lastModificationDate": 1680629430670,
-      "contentHash": "d2b991558361491411cf1253bc8d33d5",
+      "lastModificationDate": 1680633188934,
+      "contentHash": "d56cff5971ef6274ce3d8e864e29d3f2",
       "sourceName": "contracts/Marketplace.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -551,6 +551,7 @@
         "@openzeppelin/contracts/security/ReentrancyGuard.sol",
         "@openzeppelin/contracts/utils/Counters.sol",
         "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol",
+        "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol",
         "hardhat/console.sol",
         "./Factory.sol",
         "./Token.sol"
@@ -630,6 +631,81 @@
       ],
       "artifacts": [
         "ReentrancyGuard"
+      ]
+    },
+    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol": {
+      "lastModificationDate": 1679564643619,
+      "contentHash": "88079762e28b246888129028f757e047",
+      "sourceName": "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ERC1155Receiver.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC1155Holder"
+      ]
+    },
+    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol": {
+      "lastModificationDate": 1679564643619,
+      "contentHash": "55b180cf664783e9a2baac20e82683fb",
+      "sourceName": "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../IERC1155Receiver.sol",
+        "../../../utils/introspection/ERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC1155Receiver"
       ]
     }
   }
