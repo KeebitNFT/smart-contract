@@ -32,12 +32,11 @@ export interface TokenInterface extends utils.Interface {
   functions: {
     "balanceOf(address,uint256)": FunctionFragment;
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
-    "baseMetadataURI()": FunctionFragment;
     "collectionName()": FunctionFragment;
-    "grantApprovalToFactory(address)": FunctionFragment;
+    "countNFT()": FunctionFragment;
     "ids(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mintBatch(address,uint256[],address,address)": FunctionFragment;
+    "mintBatch(address,uint256[])": FunctionFragment;
     "mintFee()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -54,9 +53,8 @@ export interface TokenInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "balanceOf"
       | "balanceOfBatch"
-      | "baseMetadataURI"
       | "collectionName"
-      | "grantApprovalToFactory"
+      | "countNFT"
       | "ids"
       | "isApprovedForAll"
       | "mintBatch"
@@ -81,17 +79,10 @@ export interface TokenInterface extends utils.Interface {
     values: [PromiseOrValue<string>[], PromiseOrValue<BigNumberish>[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "baseMetadataURI",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "collectionName",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "grantApprovalToFactory",
-    values: [PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: "countNFT", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ids",
     values: [PromiseOrValue<BigNumberish>]
@@ -102,12 +93,7 @@ export interface TokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "mintBatch",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<string>,
-      PromiseOrValue<string>
-    ]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>[]]
   ): string;
   encodeFunctionData(functionFragment: "mintFee", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -162,17 +148,10 @@ export interface TokenInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "baseMetadataURI",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "collectionName",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "grantApprovalToFactory",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "countNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ids", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
@@ -322,14 +301,9 @@ export interface Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber[]]>;
 
-    baseMetadataURI(overrides?: CallOverrides): Promise<[string]>;
-
     collectionName(overrides?: CallOverrides): Promise<[string]>;
 
-    grantApprovalToFactory(
-      factoryAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+    countNFT(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     ids(
       arg0: PromiseOrValue<BigNumberish>,
@@ -345,8 +319,6 @@ export interface Token extends BaseContract {
     mintBatch(
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
-      market: PromiseOrValue<string>,
-      factory: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -415,14 +387,9 @@ export interface Token extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
-  baseMetadataURI(overrides?: CallOverrides): Promise<string>;
-
   collectionName(overrides?: CallOverrides): Promise<string>;
 
-  grantApprovalToFactory(
-    factoryAddress: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  countNFT(overrides?: CallOverrides): Promise<BigNumber>;
 
   ids(
     arg0: PromiseOrValue<BigNumberish>,
@@ -438,8 +405,6 @@ export interface Token extends BaseContract {
   mintBatch(
     _account: PromiseOrValue<string>,
     _ids: PromiseOrValue<BigNumberish>[],
-    market: PromiseOrValue<string>,
-    factory: PromiseOrValue<string>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -508,14 +473,9 @@ export interface Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    baseMetadataURI(overrides?: CallOverrides): Promise<string>;
-
     collectionName(overrides?: CallOverrides): Promise<string>;
 
-    grantApprovalToFactory(
-      factoryAddress: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    countNFT(overrides?: CallOverrides): Promise<BigNumber>;
 
     ids(
       arg0: PromiseOrValue<BigNumberish>,
@@ -531,8 +491,6 @@ export interface Token extends BaseContract {
     mintBatch(
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
-      market: PromiseOrValue<string>,
-      factory: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
@@ -658,14 +616,9 @@ export interface Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    baseMetadataURI(overrides?: CallOverrides): Promise<BigNumber>;
-
     collectionName(overrides?: CallOverrides): Promise<BigNumber>;
 
-    grantApprovalToFactory(
-      factoryAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    countNFT(overrides?: CallOverrides): Promise<BigNumber>;
 
     ids(
       arg0: PromiseOrValue<BigNumberish>,
@@ -681,8 +634,6 @@ export interface Token extends BaseContract {
     mintBatch(
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
-      market: PromiseOrValue<string>,
-      factory: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -752,14 +703,9 @@ export interface Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    baseMetadataURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     collectionName(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    grantApprovalToFactory(
-      factoryAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    countNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ids(
       arg0: PromiseOrValue<BigNumberish>,
@@ -775,8 +721,6 @@ export interface Token extends BaseContract {
     mintBatch(
       _account: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
-      market: PromiseOrValue<string>,
-      factory: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

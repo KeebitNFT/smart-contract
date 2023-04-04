@@ -6,3 +6,20 @@ const config: HardhatUserConfig = {
 };
 
 export default config;
+// module.exports = {
+//   solidity: {
+//     version: "0.8.18",
+//   },
+//   networks: {
+//     hardhat: {
+//       gas: 12000000,
+//       allowUnlimitedContractSize: true,
+//     },
+//   },
+//   paths: {
+//     sources: "./contracts",
+//     tests: "./test",
+//     cache: "./cache",
+//     artifacts: "./artifacts",
+//   },
+// };
