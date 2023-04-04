@@ -1,9 +1,9 @@
-import { expect } from "chai";
-import { ethers } from "hardhat";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { Factory } from "../typechain-types/";
-import { Marketplace } from "../typechain-types/";
-import { Token } from "../typechain-types/";
+import { expect } from 'chai';
+import { ethers } from 'hardhat';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { Factory } from '../typechain-types/';
+import { Marketplace } from '../typechain-types/';
+import { Token } from '../typechain-types/';
 
 let marketplaceContract: Marketplace;
 let factoryContract: Factory;
@@ -12,56 +12,73 @@ let owner: SignerWithAddress;
 let vendor: SignerWithAddress;
 let peer: SignerWithAddress;
 
-describe("Keebit processes", function () {
-  before(async () => {
-    const Marketplace = await ethers.getContractFactory("Marketplace");
-    const Factory = await ethers.getContractFactory("Factory");
+const COLLECTION_NAME = 'KeebitCollection';
+const URI = 'https://keebit.com/token/1';
+const IDS = [1, 2, 3];
 
-    marketplaceContract = await Marketplace.deploy(2);
-    await marketplaceContract.deployed();
+describe('Keebit processes', function () {
+  before(async () => {
+    const Marketplace = await ethers.getContractFactory('Marketplace');
+    const Factory = await ethers.getContractFactory('Factory');
 
     factoryContract = await Factory.deploy();
     await factoryContract.deployed();
 
+    marketplaceContract = await Marketplace.deploy(factoryContract.address, 2);
+    await marketplaceContract.deployed();
+
     [owner, vendor, peer] = await ethers.getSigners();
   });
 
-  describe("To create NFT collection", async function () {
-    it("Should save vendor address", async function () {
+  describe('To create NFT collection', async function () {
+    it('Should save vendor address', async function () {
       await factoryContract.saveVendor(vendor.address);
       expect(await factoryContract.isVendor(vendor.address)).to.equal(true);
       expect(await factoryContract.isVendor(peer.address)).to.equal(false);
-
-      // check that only owner can call this function
     });
 
-    it("Should create a new NFT collection and mint NFTs", async function () {
-      const contractName = "KeebitCollection";
-      const uri = "https://keebit.com/token/1";
-      const ids = [1, 2, 3];
-
+    it('Should create a new NFT collection and mint NFTs', async function () {
       const result = await factoryContract
         .connect(vendor)
-        .createNFT(contractName, uri, ids);
-      //check token contract deployment
-      const tokenContract = await ethers.getContractAt(
-        "Token",
+        .createNFT(COLLECTION_NAME, URI, IDS);
+
+      // Check token contract deployment
+      tokenContract = await ethers.getContractAt(
+        'Token',
         await factoryContract.tokens(0)
       );
-      //   expect(await tokenContract.ids(0)).to.equal(ids[0]);
-      //   expect(await tokenContract.ids(2)).to.equal(ids[2]);
-      expect(await tokenContract.uri(0)).to.equal(uri);
-      expect(await tokenContract.collectionName()).to.equal(contractName);
-      //check TokenDeployed event emitting
-      expect(result).to.emit(factoryContract, "TokenDeployed");
+      expect(await tokenContract.ids(0)).to.equal(IDS[0]);
+      expect(await tokenContract.ids(2)).to.equal(IDS[2]);
+      expect(await tokenContract.uri(0)).to.equal(URI);
+      expect(await tokenContract.collectionName()).to.equal(COLLECTION_NAME);
 
-      //check minting
-      for (let i = 0; i < ids.length; i++) {
-        const tokenId = ids[i];
+      // Check TokenDeployed event emitting
+      expect(result).to.emit(factoryContract, 'TokenDeployed');
+
+      // Check minting
+      for (let i = 0; i < IDS.length; i++) {
+        const tokenId = IDS[i];
         const balance = await tokenContract.balanceOf(vendor.address, tokenId);
         expect(balance).to.equal(1);
       }
     });
   });
+
+  describe('Get all NFTs in my wallet', async function () {
+    it('Should get all my NFTs in the token contracts contains in the factory contract', async function () {
+      const nfts = await factoryContract.connect(vendor).getMyNFTs();
+
+      const ids = [];
+      for (const nft of nfts) {
+        const [address, collectionName, uri, tokenId] = nft;
+        expect(address).to.equal(tokenContract.address);
+        expect(collectionName).to.equal(COLLECTION_NAME);
+        expect(uri).to.equal(URI);
+        ids.push(tokenId);
+      }
+      expect(IDS).to.deep.equal(ids);
+    });
+  });
+
   //   describe("Create a collection and mint NFTs to caller", function () {});
 });

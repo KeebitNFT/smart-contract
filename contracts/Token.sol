@@ -9,7 +9,6 @@ import "hardhat/console.sol";
 contract Token is ERC1155, Ownable {
     uint[] public ids; //uint array of ids
     string public collectionName; //the token name
-    uint public mintFee = 0 wei;
 
     // 1 contract = 1 collection
     // 1 collection can have multiple tokens, represented by ids
@@ -23,22 +22,13 @@ contract Token is ERC1155, Ownable {
         collectionName = _collectionName;
     }
 
-    function setMintFee(uint _fee) public onlyOwner {
-        mintFee = _fee;
-        console.log(mintFee);
-    }
-
     function mintBatch(
         address _account,
         uint256[] memory _ids
     ) external payable onlyOwner returns (uint256[] memory) {
-        console.log("mintBatch() caller: %s", msg.sender);
-        console.log("mintBatch() owner: %s", _account);
-        require(msg.value == mintFee);
-
         uint256[] memory amounts = new uint256[](_ids.length);
         for (uint i = 0; i < _ids.length; i++) {
-            amounts[i] = 1; // amount of all token id = 1
+            amounts[i] = 1;
         }
         _mintBatch(_account, _ids, amounts, "");
         return _ids;

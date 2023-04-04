@@ -3,12 +3,12 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
+import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 import "hardhat/console.sol";
 import "./Factory.sol";
 import "./Token.sol";
 
-contract Marketplace is ReentrancyGuard {
+contract Marketplace is ReentrancyGuard, ERC1155Holder {
     uint private itemCount; // # item ever been listed
     uint private itemOnList; // # item currently listed
     address payable public immutable owner;
@@ -56,15 +56,16 @@ contract Marketplace is ReentrancyGuard {
         address indexed owner
     );
 
-    constructor(uint _feePercent) {
+    constructor(address factoryAddress, uint _feePercent) {
+        factory = Factory(factoryAddress);
         owner = payable(msg.sender);
         feePercent = _feePercent;
     }
 
     // List nft or NFTs
     function listNFTs(
-        Token _nftContract,
-        uint[] memory _tokenIds,
+        address _nftContract,
+        uint[] calldata _tokenIds,
         uint _price
     ) external nonReentrant returns (address) {
         require(
@@ -75,9 +76,9 @@ contract Marketplace is ReentrancyGuard {
         require(_price > 0, "Price must be at least 1 wei");
 
         for (uint i = 0; i < _tokenIds.length; i++) {
-            _list(_nftContract, _tokenIds[i], _price);
+            _list(Token(_nftContract), _tokenIds[i], _price);
         }
-        return address(_nftContract);
+        return _nftContract;
     }
 
     function _list(Token _nftContract, uint _tokenId, uint _price) private {

@@ -8,7 +8,7 @@ import "hardhat/console.sol";
 
 contract Factory is Ownable {
     Token[] public tokens;
-    mapping(Token => bool) public isToken;
+    mapping(address => bool) public isToken;
     mapping(address => bool) public isVendor;
 
     struct FactoryNFT {
@@ -26,7 +26,7 @@ contract Factory is Ownable {
     }
 
     function createNFT(
-        string memory _contractName,
+        string memory _collectionName,
         string memory _uri,
         uint[] memory _ids
     ) external returns (address) {
@@ -36,9 +36,9 @@ contract Factory is Ownable {
         );
 
         // Deploy contract
-        Token tokenContract = new Token(_contractName, _uri, _ids);
+        Token tokenContract = new Token(_collectionName, _uri, _ids);
         tokens.push(tokenContract);
-        isToken[tokenContract] = true;
+        isToken[address(tokenContract)] = true;
         emit TokenDeployed(msg.sender, address(tokenContract));
 
         // Mint NFT
@@ -52,8 +52,34 @@ contract Factory is Ownable {
         emit TokenMinted(msg.sender, address(_token), _ids.length);
     }
 
+    function countMyNFTs() public view returns (uint) {
+        uint count = 0;
+        for (uint i = 0; i < tokens.length; i++) {
+            // Create array of accounts and ids
+            uint num = tokens[i].countNFT();
+            address[] memory owners = new address[](num);
+            uint[] memory ids = new uint[](num);
+            for (uint j = 0; j < num; j++) {
+                owners[j] = msg.sender;
+                ids[j] = j + 1; // id starts from 1
+            }
+
+            // Get owner's balance of all ids
+            uint[] memory balances = tokens[i].balanceOfBatch(owners, ids);
+
+            // Get owner's NFTs
+            for (uint k = 0; k < balances.length; k++) {
+                if (balances[k] > 0) {
+                    count++;
+                }
+            }
+        }
+        return (count);
+    }
+
     function getMyNFTs() external view returns (FactoryNFT[] memory) {
-        FactoryNFT[] memory myNFTs;
+        uint nftsCount = countMyNFTs();
+        FactoryNFT[] memory myNFTs = new FactoryNFT[](nftsCount);
         uint counter;
         for (uint i = 0; i < tokens.length; i++) {
             // Create array of accounts and ids
@@ -71,11 +97,13 @@ contract Factory is Ownable {
             // Get owner's NFTs
             for (uint k = 0; k < balances.length; k++) {
                 if (balances[k] > 0) {
-                    myNFTs[counter] = FactoryNFT(
-                        address(tokens[i]),
-                        tokens[i].collectionName(),
-                        tokens[i].uri(1),
-                        k + 1
+                    myNFTs[counter] = (
+                        FactoryNFT(
+                            address(tokens[i]),
+                            tokens[i].collectionName(),
+                            tokens[i].uri(1),
+                            k + 1
+                        )
                     );
                     counter++;
                 }

@@ -45,11 +45,11 @@ export declare namespace Factory {
 
 export interface FactoryInterface extends utils.Interface {
   functions: {
+    "countMyNFTs()": FunctionFragment;
     "createNFT(string,string,uint256[])": FunctionFragment;
-    "getMyNFT()": FunctionFragment;
+    "getMyNFTs()": FunctionFragment;
     "isToken(address)": FunctionFragment;
     "isVendor(address)": FunctionFragment;
-    "myNFTs(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "saveVendor(address)": FunctionFragment;
@@ -59,11 +59,11 @@ export interface FactoryInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "countMyNFTs"
       | "createNFT"
-      | "getMyNFT"
+      | "getMyNFTs"
       | "isToken"
       | "isVendor"
-      | "myNFTs"
       | "owner"
       | "renounceOwnership"
       | "saveVendor"
@@ -72,6 +72,10 @@ export interface FactoryInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
+    functionFragment: "countMyNFTs",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "createNFT",
     values: [
       PromiseOrValue<string>,
@@ -79,7 +83,7 @@ export interface FactoryInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>[]
     ]
   ): string;
-  encodeFunctionData(functionFragment: "getMyNFT", values?: undefined): string;
+  encodeFunctionData(functionFragment: "getMyNFTs", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "isToken",
     values: [PromiseOrValue<string>]
@@ -87,10 +91,6 @@ export interface FactoryInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "isVendor",
     values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "myNFTs",
-    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -110,11 +110,14 @@ export interface FactoryInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "countMyNFTs",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "createNFT", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getMyNFT", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getMyNFTs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isVendor", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "myNFTs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -200,14 +203,16 @@ export interface Factory extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    countMyNFTs(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     createNFT(
-      _contractName: PromiseOrValue<string>,
+      _collectionName: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    getMyNFT(
+    getMyNFTs(
       overrides?: CallOverrides
     ): Promise<[Factory.FactoryNFTStructOutput[]]>;
 
@@ -220,18 +225,6 @@ export interface Factory extends BaseContract {
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
-
-    myNFTs(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<
-      [string, string, string, BigNumber] & {
-        tokenAddress: string;
-        collectionName: string;
-        uri: string;
-        tokenId: BigNumber;
-      }
-    >;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -255,14 +248,16 @@ export interface Factory extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  countMyNFTs(overrides?: CallOverrides): Promise<BigNumber>;
+
   createNFT(
-    _contractName: PromiseOrValue<string>,
+    _collectionName: PromiseOrValue<string>,
     _uri: PromiseOrValue<string>,
     _ids: PromiseOrValue<BigNumberish>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  getMyNFT(
+  getMyNFTs(
     overrides?: CallOverrides
   ): Promise<Factory.FactoryNFTStructOutput[]>;
 
@@ -275,18 +270,6 @@ export interface Factory extends BaseContract {
     arg0: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
-
-  myNFTs(
-    arg0: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<
-    [string, string, string, BigNumber] & {
-      tokenAddress: string;
-      collectionName: string;
-      uri: string;
-      tokenId: BigNumber;
-    }
-  >;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -310,14 +293,16 @@ export interface Factory extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    countMyNFTs(overrides?: CallOverrides): Promise<BigNumber>;
+
     createNFT(
-      _contractName: PromiseOrValue<string>,
+      _collectionName: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getMyNFT(
+    getMyNFTs(
       overrides?: CallOverrides
     ): Promise<Factory.FactoryNFTStructOutput[]>;
 
@@ -330,18 +315,6 @@ export interface Factory extends BaseContract {
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    myNFTs(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<
-      [string, string, string, BigNumber] & {
-        tokenAddress: string;
-        collectionName: string;
-        uri: string;
-        tokenId: BigNumber;
-      }
-    >;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -392,14 +365,16 @@ export interface Factory extends BaseContract {
   };
 
   estimateGas: {
+    countMyNFTs(overrides?: CallOverrides): Promise<BigNumber>;
+
     createNFT(
-      _contractName: PromiseOrValue<string>,
+      _collectionName: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    getMyNFT(overrides?: CallOverrides): Promise<BigNumber>;
+    getMyNFTs(overrides?: CallOverrides): Promise<BigNumber>;
 
     isToken(
       arg0: PromiseOrValue<string>,
@@ -408,11 +383,6 @@ export interface Factory extends BaseContract {
 
     isVendor(
       arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    myNFTs(
-      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -439,14 +409,16 @@ export interface Factory extends BaseContract {
   };
 
   populateTransaction: {
+    countMyNFTs(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     createNFT(
-      _contractName: PromiseOrValue<string>,
+      _collectionName: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    getMyNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getMyNFTs(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     isToken(
       arg0: PromiseOrValue<string>,
@@ -455,11 +427,6 @@ export interface Factory extends BaseContract {
 
     isVendor(
       arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    myNFTs(
-      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
