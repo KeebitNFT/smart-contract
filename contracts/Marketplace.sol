@@ -9,8 +9,8 @@ import "./Factory.sol";
 import "./Token.sol";
 
 contract Marketplace is ReentrancyGuard {
-    uint private itemCount; // # item ever been listed
-    uint private itemOnList; // # item currently listed
+    uint public itemCount; // # item ever been listed
+    uint public itemOnList; // # item currently listed
     address payable public immutable owner;
     uint public immutable feePercent; // transaction fee, no listing fee
     Factory public factory;
@@ -56,14 +56,15 @@ contract Marketplace is ReentrancyGuard {
         address indexed owner
     );
 
-    constructor(uint _feePercent) {
+    constructor(address _factory, uint _feePercent) {
+        factory = Factory(_factory);
         owner = payable(msg.sender);
         feePercent = _feePercent;
     }
 
     // list nft or NFTs
-    function listNFT(
-        Token _nftContract,
+    function listNFTs(
+        address _nftContract,
         uint[] memory _tokenIds,
         uint _price
     ) external nonReentrant returns (address) {
@@ -75,7 +76,7 @@ contract Marketplace is ReentrancyGuard {
         require(_price > 0, "Price must be at least 1 wei");
 
         for (uint i = 0; i < _tokenIds.length; i++) {
-            _list(_nftContract, _tokenIds[i], _price);
+            _list(Token(_nftContract), _tokenIds[i], _price);
             // console.log("token id: %s", _tokenIds[i]);
         }
         return address(_nftContract);

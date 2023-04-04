@@ -14,14 +14,14 @@ let peer: SignerWithAddress;
 
 describe("Keebit processes", function () {
   before(async () => {
-    const Marketplace = await ethers.getContractFactory("Marketplace");
     const Factory = await ethers.getContractFactory("Factory");
-
-    marketplaceContract = await Marketplace.deploy(2);
-    await marketplaceContract.deployed();
+    const Marketplace = await ethers.getContractFactory("Marketplace");
 
     factoryContract = await Factory.deploy();
     await factoryContract.deployed();
+
+    marketplaceContract = await Marketplace.deploy(factoryContract.address, 2);
+    await marketplaceContract.deployed();
 
     [owner, vendor, peer] = await ethers.getSigners();
   });
@@ -44,12 +44,12 @@ describe("Keebit processes", function () {
         .connect(vendor)
         .createNFT(contractName, uri, ids);
       //check token contract deployment
-      const tokenContract = await ethers.getContractAt(
+      tokenContract = await ethers.getContractAt(
         "Token",
         await factoryContract.tokens(0)
       );
-      //   expect(await tokenContract.ids(0)).to.equal(ids[0]);
-      //   expect(await tokenContract.ids(2)).to.equal(ids[2]);
+      expect(await tokenContract.ids(0)).to.equal(ids[0]);
+      expect(await tokenContract.ids(2)).to.equal(ids[2]);
       expect(await tokenContract.uri(0)).to.equal(uri);
       expect(await tokenContract.collectionName()).to.equal(contractName);
       //check TokenDeployed event emitting
@@ -63,5 +63,37 @@ describe("Keebit processes", function () {
       }
     });
   });
-  //   describe("Create a collection and mint NFTs to caller", function () {});
+  describe("List NFTs", function () {
+    it("Should list NFTs", async function () {
+      // frontend should call this function
+      tokenContract
+        .connect(vendor)
+        .setApprovalForAll(marketplaceContract.address, true);
+      // smart contract begins from here
+      const result = await marketplaceContract
+        .connect(vendor)
+        .listNFTs(tokenContract.address, [1, 2], 10);
+      // check that NFTs are transferred to marketplace contract
+      expect(
+        await tokenContract.balanceOf(marketplaceContract.address, 1)
+      ).to.equal(1);
+      expect(
+        await tokenContract.balanceOf(marketplaceContract.address, 2)
+      ).to.equal(1);
+      // check that itemId is the same itemCount
+      expect(
+        (await marketplaceContract.nfts(tokenContract.address)).itemId
+      ).to.equal(marketplaceContract.itemCount);
+      // check that isOnlist = true
+      expect(
+        (await marketplaceContract.nfts(tokenContract.address)).isOnList
+      ).to.equal(true);
+      // check that isOfficial = true
+      expect(
+        (await marketplaceContract.nfts(tokenContract.address)).isOfficial
+      ).to.equal(true);
+      // check that event NFTListed is emitted
+      expect(result).to.emit(marketplaceContract, "NFTListed");
+    });
+  });
 });

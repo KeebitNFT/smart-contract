@@ -71,7 +71,9 @@ export interface MarketplaceInterface extends utils.Interface {
     "feePercent()": FunctionFragment;
     "getListedNFTs()": FunctionFragment;
     "getMyListedNFTs()": FunctionFragment;
-    "listNFT(address,uint256[],uint256)": FunctionFragment;
+    "itemCount()": FunctionFragment;
+    "itemOnList()": FunctionFragment;
+    "listNFTs(address,uint256[],uint256)": FunctionFragment;
     "nfts(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "unlistNFT(address,uint256)": FunctionFragment;
@@ -85,7 +87,9 @@ export interface MarketplaceInterface extends utils.Interface {
       | "feePercent"
       | "getListedNFTs"
       | "getMyListedNFTs"
-      | "listNFT"
+      | "itemCount"
+      | "itemOnList"
+      | "listNFTs"
       | "nfts"
       | "owner"
       | "unlistNFT"
@@ -109,8 +113,13 @@ export interface MarketplaceInterface extends utils.Interface {
     functionFragment: "getMyListedNFTs",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "itemCount", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "listNFT",
+    functionFragment: "itemOnList",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "listNFTs",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>[],
@@ -142,7 +151,9 @@ export interface MarketplaceInterface extends utils.Interface {
     functionFragment: "getMyListedNFTs",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "listNFT", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "itemCount", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "itemOnList", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "listNFTs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "nfts", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "unlistNFT", data: BytesLike): Result;
@@ -254,7 +265,11 @@ export interface Marketplace extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[Marketplace.MarketNFTStructOutput[]]>;
 
-    listNFT(
+    itemCount(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    itemOnList(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    listNFTs(
       _nftContract: PromiseOrValue<string>,
       _tokenIds: PromiseOrValue<BigNumberish>[],
       _price: PromiseOrValue<BigNumberish>,
@@ -320,7 +335,11 @@ export interface Marketplace extends BaseContract {
     overrides?: CallOverrides
   ): Promise<Marketplace.MarketNFTStructOutput[]>;
 
-  listNFT(
+  itemCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+  itemOnList(overrides?: CallOverrides): Promise<BigNumber>;
+
+  listNFTs(
     _nftContract: PromiseOrValue<string>,
     _tokenIds: PromiseOrValue<BigNumberish>[],
     _price: PromiseOrValue<BigNumberish>,
@@ -386,7 +405,11 @@ export interface Marketplace extends BaseContract {
       overrides?: CallOverrides
     ): Promise<Marketplace.MarketNFTStructOutput[]>;
 
-    listNFT(
+    itemCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    itemOnList(overrides?: CallOverrides): Promise<BigNumber>;
+
+    listNFTs(
       _nftContract: PromiseOrValue<string>,
       _tokenIds: PromiseOrValue<BigNumberish>[],
       _price: PromiseOrValue<BigNumberish>,
@@ -508,7 +531,11 @@ export interface Marketplace extends BaseContract {
 
     getMyListedNFTs(overrides?: CallOverrides): Promise<BigNumber>;
 
-    listNFT(
+    itemCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    itemOnList(overrides?: CallOverrides): Promise<BigNumber>;
+
+    listNFTs(
       _nftContract: PromiseOrValue<string>,
       _tokenIds: PromiseOrValue<BigNumberish>[],
       _price: PromiseOrValue<BigNumberish>,
@@ -549,7 +576,11 @@ export interface Marketplace extends BaseContract {
 
     getMyListedNFTs(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    listNFT(
+    itemCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    itemOnList(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    listNFTs(
       _nftContract: PromiseOrValue<string>,
       _tokenIds: PromiseOrValue<BigNumberish>[],
       _price: PromiseOrValue<BigNumberish>,

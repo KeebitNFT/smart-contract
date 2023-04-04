@@ -25,15 +25,12 @@ contract Token is ERC1155, Ownable {
 
     function setMintFee(uint _fee) public onlyOwner {
         mintFee = _fee;
-        console.log(mintFee);
     }
 
     function mintBatch(
         address _account,
         uint256[] memory _ids
     ) external payable onlyOwner returns (uint256[] memory) {
-        console.log("mintBatch() caller: %s", msg.sender);
-        console.log("mintBatch() owner: %s", _account);
         require(msg.value == mintFee);
 
         uint256[] memory amounts = new uint256[](_ids.length);

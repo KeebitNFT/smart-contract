@@ -49,7 +49,6 @@ export interface FactoryInterface extends utils.Interface {
     "getMyNFT()": FunctionFragment;
     "isToken(address)": FunctionFragment;
     "isVendor(address)": FunctionFragment;
-    "myNFTs(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "saveVendor(address)": FunctionFragment;
@@ -63,7 +62,6 @@ export interface FactoryInterface extends utils.Interface {
       | "getMyNFT"
       | "isToken"
       | "isVendor"
-      | "myNFTs"
       | "owner"
       | "renounceOwnership"
       | "saveVendor"
@@ -88,10 +86,6 @@ export interface FactoryInterface extends utils.Interface {
     functionFragment: "isVendor",
     values: [PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "myNFTs",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -114,7 +108,6 @@ export interface FactoryInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "getMyNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isVendor", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "myNFTs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -221,18 +214,6 @@ export interface Factory extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    myNFTs(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<
-      [string, string, string, BigNumber] & {
-        tokenAddress: string;
-        collectionName: string;
-        uri: string;
-        tokenId: BigNumber;
-      }
-    >;
-
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
@@ -276,18 +257,6 @@ export interface Factory extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  myNFTs(
-    arg0: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<
-    [string, string, string, BigNumber] & {
-      tokenAddress: string;
-      collectionName: string;
-      uri: string;
-      tokenId: BigNumber;
-    }
-  >;
-
   owner(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(
@@ -330,18 +299,6 @@ export interface Factory extends BaseContract {
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    myNFTs(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<
-      [string, string, string, BigNumber] & {
-        tokenAddress: string;
-        collectionName: string;
-        uri: string;
-        tokenId: BigNumber;
-      }
-    >;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -411,11 +368,6 @@ export interface Factory extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    myNFTs(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
@@ -455,11 +407,6 @@ export interface Factory extends BaseContract {
 
     isVendor(
       arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    myNFTs(
-      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
