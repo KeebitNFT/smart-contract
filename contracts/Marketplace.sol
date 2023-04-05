@@ -71,7 +71,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
     ) external nonReentrant returns (address) {
         require(
             factory.isToken(_nftContract),
-            "Only a valid token contract can be listed"
+            "Only NFTs of a valid token contract can be listed"
         );
         require(_tokenIds.length > 0, "No token id provided");
         require(_price > 0, "Price must be at least 1 wei");
