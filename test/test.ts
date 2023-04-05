@@ -4,7 +4,6 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Factory } from "../typechain-types/";
 import { Marketplace } from "../typechain-types/";
 import { Token } from "../typechain-types/";
-import { BigNumber } from "ethers";
 
 let marketplaceContract: Marketplace;
 let factoryContract: Factory;
@@ -12,8 +11,6 @@ let tokenContract: Token;
 let owner: SignerWithAddress;
 let vendor: SignerWithAddress;
 let peer: SignerWithAddress;
-var chai = require("chai");
-chai.use(require("chai-bignumber")());
 
 const CONTRACT_NAME = "KeebitCollection";
 const URI = "https://keebit.com/token/1";
@@ -77,28 +74,26 @@ describe("Keebit processes", function () {
         .connect(vendor)
         .listNFTs(tokenContract.address, [1, 2], 10);
       // check that NFTs are transferred to marketplace contract
-      console.log(
-        await tokenContract.balanceOf(marketplaceContract.address, 1)
-      );
-      console.log(BigNumber.from("1"));
+      const itemCount = await marketplaceContract.itemCount();
+
       expect(
         await tokenContract.balanceOf(marketplaceContract.address, 1)
-      ).to.be.bignumber.equal(BigNumber.from("1"));
-      // expect(
-      //   await tokenContract.balanceOf(marketplaceContract.address, 2)
-      // ).to.equal(1);
+      ).to.be.equal(1);
+      expect(
+        await tokenContract.balanceOf(marketplaceContract.address, 2)
+      ).to.equal(1);
       // check that itemId is the same itemCount
-      expect(
-        (await marketplaceContract.nfts(tokenContract.address)).itemId
-      ).to.equal(marketplaceContract.itemCount);
+      expect((await marketplaceContract.nfts(itemCount)).itemId).to.equal(
+        itemCount
+      );
       // check that isOnlist = true
-      expect(
-        (await marketplaceContract.nfts(tokenContract.address)).isOnList
-      ).to.equal(true);
+      expect((await marketplaceContract.nfts(itemCount)).isOnList).to.equal(
+        true
+      );
       // check that isOfficial = true
-      expect(
-        (await marketplaceContract.nfts(tokenContract.address)).isOfficial
-      ).to.equal(true);
+      expect((await marketplaceContract.nfts(itemCount)).isOfficial).to.equal(
+        true
+      );
       // check that event NFTListed is emitted
       expect(result).to.emit(marketplaceContract, "NFTListed");
     });
