@@ -15,6 +15,8 @@ let peer: SignerWithAddress;
 const CONTRACT_NAME = "KeebitCollection";
 const URI = "https://keebit.com/token/1";
 const IDS = [1, 2, 3];
+const FEE_PERCENT = 2;
+const PRICE = ethers.utils.parseEther("10");
 
 describe("Keebit processes", function () {
   before(async () => {
@@ -24,7 +26,10 @@ describe("Keebit processes", function () {
     factoryContract = await Factory.deploy();
     await factoryContract.deployed();
 
-    marketplaceContract = await Marketplace.deploy(factoryContract.address, 2);
+    marketplaceContract = await Marketplace.deploy(
+      factoryContract.address,
+      FEE_PERCENT
+    );
     await marketplaceContract.deployed();
 
     [owner, vendor, peer] = await ethers.getSigners();
@@ -37,6 +42,11 @@ describe("Keebit processes", function () {
       expect(await factoryContract.isVendor(peer.address)).to.equal(false);
 
       // check that only owner can call this function
+    });
+    it("Should revert when non-owners call saveVendor()", async function () {
+      await expect(
+        factoryContract.connect(peer).saveVendor(peer.address)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
     });
 
     it("Should create a new NFT collection and mint NFTs", async function () {
@@ -63,7 +73,7 @@ describe("Keebit processes", function () {
       }
     });
   });
-  describe("List NFTs", function () {
+  describe("Marketplace functions", function () {
     it("Should list NFTs", async function () {
       // frontend should call this function
       await tokenContract
@@ -76,12 +86,16 @@ describe("Keebit processes", function () {
       // check that NFTs are transferred to marketplace contract
       const itemCount = await marketplaceContract.itemCount();
 
+      // check that NFTs are transferred to marketplace contract
       expect(
         await tokenContract.balanceOf(marketplaceContract.address, 1)
       ).to.be.equal(1);
       expect(
         await tokenContract.balanceOf(marketplaceContract.address, 2)
       ).to.equal(1);
+      expect(await tokenContract.balanceOf(vendor.address, 1)).to.equal(0);
+      expect(await tokenContract.balanceOf(vendor.address, 2)).to.equal(0);
+
       // check that itemId is the same itemCount
       expect((await marketplaceContract.nfts(itemCount)).itemId).to.equal(
         itemCount
@@ -96,6 +110,24 @@ describe("Keebit processes", function () {
       );
       // check that event NFTListed is emitted
       expect(result).to.emit(marketplaceContract, "NFTListed");
+
+      //check that only NFTs from factory can be listed
+    });
+
+    it("Should buy NFTs", async function () {
+      // case 1: enough balance
+      const totalPrice = PRICE.mul(100 + FEE_PERCENT).div(100);
+      const msgValue = totalPrice;
+      const sellerBalanceBefore = await vendor.getBalance();
+      const buyerBalanceBefore = await peer.getBalance();
+
+      const result = await marketplaceContract.connect(peer).buyNFT(1, {
+        value: msgValue,
+      });
+      // check that ethers are transferred to seller
+      const sellerBalanceAfter = await vendor.getBalance();
+      const buyerBalanceAfter = await peer.getBalance();
+      // expect(sellerBalanceAfter.minus(sellerBalanceBefore)).to.equal(msgValue);
     });
   });
 });
