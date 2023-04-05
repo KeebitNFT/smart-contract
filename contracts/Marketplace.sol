@@ -9,8 +9,8 @@ import "./Factory.sol";
 import "./Token.sol";
 
 contract Marketplace is ReentrancyGuard, ERC1155Holder {
-    uint private itemCount; // # item ever been listed
-    uint private itemOnList; // # item currently listed
+    uint public itemCount; // # item ever been listed
+    uint public itemOnList; // # item currently listed
     address payable public immutable owner;
     uint public immutable feePercent; // transaction fee, no listing fee
     Factory public factory;
@@ -62,7 +62,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         feePercent = _feePercent;
     }
 
-    // List nft or NFTs
+    // list nft or NFTs
     function listNFTs(
         address _nftContract,
         uint[] calldata _tokenIds,
@@ -230,4 +230,36 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         nfts[_itemId].price = _newPrice;
         return (_newPrice);
     }
+
+    // function onERC1155Received(
+    //     address _operator,
+    //     address _from,
+    //     uint256 _id,
+    //     uint256 _value,
+    //     bytes memory _data
+    // ) public override returns (bytes4) {
+    //     // Do something with the transferred tokens and the additional data
+    //     return
+    //         bytes4(
+    //             keccak256(
+    //                 "onERC1155Received(address,address,uint256,uint256,bytes)"
+    //             )
+    //         );
+    // }
+
+    // function onERC1155BatchReceived(
+    //     address _operator,
+    //     address _from,
+    //     uint256[] memory _id,
+    //     uint256[] memory _value,
+    //     bytes memory _data
+    // ) public override returns (bytes4) {
+    //     // Do something with the transferred tokens and the additional data
+    //     return
+    //         bytes4(
+    //             keccak256(
+    //                 "onERC1155BatchReceived(address,address,uint256,uint256,bytes)"
+    //             )
+    //         );
+    // }
 }

@@ -18,8 +18,8 @@ const IDS = [1, 2, 3];
 
 describe('Keebit processes', function () {
   before(async () => {
-    const Marketplace = await ethers.getContractFactory('Marketplace');
     const Factory = await ethers.getContractFactory('Factory');
+    const Marketplace = await ethers.getContractFactory('Marketplace');
 
     factoryContract = await Factory.deploy();
     await factoryContract.deployed();
@@ -81,4 +81,39 @@ describe('Keebit processes', function () {
   });
 
   //   describe("Create a collection and mint NFTs to caller", function () {});
+  describe('List NFTs', function () {
+    it('Should list NFTs', async function () {
+      // frontend should call this function
+      await tokenContract
+        .connect(vendor)
+        .setApprovalForAll(marketplaceContract.address, true);
+      // smart contract begins from here
+      const result = await marketplaceContract
+        .connect(vendor)
+        .listNFTs(tokenContract.address, [1, 2], 10);
+      // check that NFTs are transferred to marketplace contract
+      const itemCount = await marketplaceContract.itemCount();
+
+      expect(
+        await tokenContract.balanceOf(marketplaceContract.address, 1)
+      ).to.be.equal(1);
+      expect(
+        await tokenContract.balanceOf(marketplaceContract.address, 2)
+      ).to.equal(1);
+      // check that itemId is the same itemCount
+      expect((await marketplaceContract.nfts(itemCount)).itemId).to.equal(
+        itemCount
+      );
+      // check that isOnlist = true
+      expect((await marketplaceContract.nfts(itemCount)).isOnList).to.equal(
+        true
+      );
+      // check that isOfficial = true
+      expect((await marketplaceContract.nfts(itemCount)).isOfficial).to.equal(
+        true
+      );
+      // check that event NFTListed is emitted
+      expect(result).to.emit(marketplaceContract, 'NFTListed');
+    });
+  });
 });
