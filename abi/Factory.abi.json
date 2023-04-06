@@ -112,7 +112,7 @@
         "components": [
           {
             "internalType": "address",
-            "name": "tokenAddress",
+            "name": "nftContract",
             "type": "address"
           },
           {

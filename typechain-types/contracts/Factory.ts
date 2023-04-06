@@ -29,14 +29,14 @@ import type {
 
 export declare namespace Factory {
   export type FactoryNFTStruct = {
-    tokenAddress: PromiseOrValue<string>;
+    nftContract: PromiseOrValue<string>;
     collectionName: PromiseOrValue<string>;
     uri: PromiseOrValue<string>;
     tokenId: PromiseOrValue<BigNumberish>;
   };
 
   export type FactoryNFTStructOutput = [string, string, string, BigNumber] & {
-    tokenAddress: string;
+    nftContract: string;
     collectionName: string;
     uri: string;
     tokenId: BigNumber;

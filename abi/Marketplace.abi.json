@@ -223,6 +223,11 @@
             "type": "string"
           },
           {
+            "internalType": "string",
+            "name": "uri",
+            "type": "string"
+          },
+          {
             "internalType": "uint256",
             "name": "tokenId",
             "type": "uint256"
@@ -280,6 +285,11 @@
           {
             "internalType": "string",
             "name": "collectionName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "uri",
             "type": "string"
           },
           {
@@ -399,6 +409,11 @@
       {
         "internalType": "string",
         "name": "collectionName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "uri",
         "type": "string"
       },
       {

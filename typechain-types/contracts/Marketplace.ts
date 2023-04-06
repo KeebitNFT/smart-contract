@@ -33,6 +33,7 @@ export declare namespace Marketplace {
     itemId: PromiseOrValue<BigNumberish>;
     nftContract: PromiseOrValue<string>;
     collectionName: PromiseOrValue<string>;
+    uri: PromiseOrValue<string>;
     tokenId: PromiseOrValue<BigNumberish>;
     price: PromiseOrValue<BigNumberish>;
     seller: PromiseOrValue<string>;
@@ -45,6 +46,7 @@ export declare namespace Marketplace {
     BigNumber,
     string,
     string,
+    string,
     BigNumber,
     BigNumber,
     string,
@@ -55,6 +57,7 @@ export declare namespace Marketplace {
     itemId: BigNumber;
     nftContract: string;
     collectionName: string;
+    uri: string;
     tokenId: BigNumber;
     price: BigNumber;
     seller: string;
@@ -326,6 +329,7 @@ export interface Marketplace extends BaseContract {
         BigNumber,
         string,
         string,
+        string,
         BigNumber,
         BigNumber,
         string,
@@ -336,6 +340,7 @@ export interface Marketplace extends BaseContract {
         itemId: BigNumber;
         nftContract: string;
         collectionName: string;
+        uri: string;
         tokenId: BigNumber;
         price: BigNumber;
         seller: string;
@@ -418,6 +423,7 @@ export interface Marketplace extends BaseContract {
       BigNumber,
       string,
       string,
+      string,
       BigNumber,
       BigNumber,
       string,
@@ -428,6 +434,7 @@ export interface Marketplace extends BaseContract {
       itemId: BigNumber;
       nftContract: string;
       collectionName: string;
+      uri: string;
       tokenId: BigNumber;
       price: BigNumber;
       seller: string;
@@ -510,6 +517,7 @@ export interface Marketplace extends BaseContract {
         BigNumber,
         string,
         string,
+        string,
         BigNumber,
         BigNumber,
         string,
@@ -520,6 +528,7 @@ export interface Marketplace extends BaseContract {
         itemId: BigNumber;
         nftContract: string;
         collectionName: string;
+        uri: string;
         tokenId: BigNumber;
         price: BigNumber;
         seller: string;
