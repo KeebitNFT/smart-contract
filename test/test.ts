@@ -4,7 +4,6 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Factory } from "../typechain-types/";
 import { Marketplace } from "../typechain-types/";
 import { Token } from "../typechain-types/";
-import { BigNumber } from "BigNumber.js";
 
 let marketplaceContract: Marketplace;
 let factoryContract: Factory;
@@ -13,13 +12,12 @@ let owner: SignerWithAddress;
 let vendor: SignerWithAddress;
 let peer: SignerWithAddress;
 
-BigNumber.config({ EXPONENTIAL_AT: 1e9 });
 const CONTRACT_NAME = "KeebitCollection";
 const URI = "https://keebit.com/token/1";
 const IDS = [1, 2, 3];
 const IDS_TO_LIST = [1, 2];
 const FEE_PERCENT = 2;
-const PRICE = ethers.utils.parseUnits("10", "wei");
+const PRICE = ethers.utils.parseUnits("10", "ether");
 const PRICE_WITH_FEE = PRICE.mul(100 + FEE_PERCENT).div(100);
 
 describe("Keebit processes", function () {
@@ -86,7 +84,7 @@ describe("Keebit processes", function () {
       // smart contract begins from here
       const result = await marketplaceContract
         .connect(vendor)
-        .listNFTs(tokenContract.address, IDS_TO_LIST, 10);
+        .listNFTs(tokenContract.address, IDS_TO_LIST, PRICE);
       // check that NFTs are transferred to marketplace contract
       const itemCount = await marketplaceContract.itemCount();
 
@@ -151,17 +149,16 @@ describe("Keebit processes", function () {
       expect(sellerBalanceAfter.sub(sellerBalanceBefore)).to.equal(PRICE);
 
       // check that marketplace owner get paid = fee
-      console.log("fee: ", PRICE_WITH_FEE.sub(PRICE));
       expect(ownerBalanceAfter.sub(ownerBalanceBefore)).to.equal(
         PRICE_WITH_FEE.sub(PRICE)
       );
 
       // check that buyer paid = NFT price + fee
-      console.log("price : ", PRICE);
-      console.log("price mul fee percent: ", PRICE_WITH_FEE);
-      expect(buyerBalanceAfter.sub(buyerBalanceBefore)).to.equal(
-        PRICE_WITH_FEE
-      );
+      expect(buyerBalanceBefore.sub(buyerBalanceAfter))
+        .to.be.above(PRICE_WITH_FEE)
+        .but.below(
+          PRICE_WITH_FEE.add(ethers.utils.parseUnits("2100000", "gwei"))
+        );
 
       // check that NFT is transferred from marketplace to buyer
       expect(
@@ -175,10 +172,10 @@ describe("Keebit processes", function () {
       ).to.equal(0);
 
       //check that NFT is not on list anymore
-      // expect((await marketplaceContract.nfts(1)).isOnList).to.equal(false);
+      expect((await marketplaceContract.nfts(1)).isOnList).to.equal(false);
 
       //check that the owner attribute of NFT is buyer
-      // expect((await marketplaceContract.nfts(1)).owner).to.equal(peer.address);
+      expect((await marketplaceContract.nfts(1)).owner).to.equal(peer.address);
 
       // check that event NFTBought is emitted
       expect(result).to.emit(marketplaceContract, "NFTBought");
