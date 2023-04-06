@@ -7,7 +7,7 @@ const config: HardhatUserConfig = {
   abiExporter: {
     runOnCompile: true,
     clear: true,
-    flat: true,
+    rename: (sourceName: string, contractName: string) => contractName + '.abi',
   },
 };
 
