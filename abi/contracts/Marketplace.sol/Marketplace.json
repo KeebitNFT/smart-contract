@@ -1,7 +1,7 @@
 [
   "constructor(address,uint256)",
+  "event NFTBought(uint256,address,string,uint256,uint256,address indexed,address indexed)",
   "event NFTListed(uint256,address,string,uint256,uint256,address indexed,address indexed)",
-  "event NFTSold(uint256,address,string,uint256,uint256,address indexed,address indexed)",
   "event NFTUnlisted(uint256,address,string,uint256,uint256,address indexed,address indexed)",
   "function buyNFT(uint256) payable",
   "function factory() view returns (address)",

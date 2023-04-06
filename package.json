@@ -17,6 +17,7 @@
     "hardhat-abi-exporter": "^2.10.1"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.8.2"
+    "@openzeppelin/contracts": "^4.8.2",
+    "web3": "^1.9.0"
   }
 }

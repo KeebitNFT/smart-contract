@@ -46,7 +46,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         address indexed seller,
         address indexed owner
     );
-    event NFTSold(
+    event NFTBought(
         uint itemId,
         address nftContract,
         string collectionName,
@@ -70,7 +70,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
     ) external nonReentrant returns (address) {
         require(
             factory.isToken(_nftContract),
-            "Only a valid token contract can be listed"
+            "Only NFTs of a valid token contract can be listed"
         );
         require(_tokenIds.length > 0, "No token id provided");
         require(_price > 0, "Price must be at least 1 wei");
@@ -145,7 +145,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
         itemOnList--;
 
-        emit NFTSold(
+        emit NFTBought(
             _itemId,
             nfts[_itemId].nftContract,
             Token(nfts[_itemId].nftContract).collectionName(),
@@ -224,36 +224,4 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         require(_newPrice > 0, "Price must be at least 1 wei");
         nfts[_itemId].price = _newPrice;
     }
-
-    // function onERC1155Received(
-    //     address _operator,
-    //     address _from,
-    //     uint256 _id,
-    //     uint256 _value,
-    //     bytes memory _data
-    // ) public override returns (bytes4) {
-    //     // Do something with the transferred tokens and the additional data
-    //     return
-    //         bytes4(
-    //             keccak256(
-    //                 "onERC1155Received(address,address,uint256,uint256,bytes)"
-    //             )
-    //         );
-    // }
-
-    // function onERC1155BatchReceived(
-    //     address _operator,
-    //     address _from,
-    //     uint256[] memory _id,
-    //     uint256[] memory _value,
-    //     bytes memory _data
-    // ) public override returns (bytes4) {
-    //     // Do something with the transferred tokens and the additional data
-    //     return
-    //         bytes4(
-    //             keccak256(
-    //                 "onERC1155BatchReceived(address,address,uint256,uint256,bytes)"
-    //             )
-    //         );
-    // }
 }

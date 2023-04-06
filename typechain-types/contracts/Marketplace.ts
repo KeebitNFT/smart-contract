@@ -205,15 +205,31 @@ export interface MarketplaceInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "NFTBought(uint256,address,string,uint256,uint256,address,address)": EventFragment;
     "NFTListed(uint256,address,string,uint256,uint256,address,address)": EventFragment;
-    "NFTSold(uint256,address,string,uint256,uint256,address,address)": EventFragment;
     "NFTUnlisted(uint256,address,string,uint256,uint256,address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "NFTBought"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NFTListed"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "NFTSold"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NFTUnlisted"): EventFragment;
 }
+
+export interface NFTBoughtEventObject {
+  itemId: BigNumber;
+  nftContract: string;
+  collectionName: string;
+  tokenId: BigNumber;
+  price: BigNumber;
+  seller: string;
+  owner: string;
+}
+export type NFTBoughtEvent = TypedEvent<
+  [BigNumber, string, string, BigNumber, BigNumber, string, string],
+  NFTBoughtEventObject
+>;
+
+export type NFTBoughtEventFilter = TypedEventFilter<NFTBoughtEvent>;
 
 export interface NFTListedEventObject {
   itemId: BigNumber;
@@ -230,22 +246,6 @@ export type NFTListedEvent = TypedEvent<
 >;
 
 export type NFTListedEventFilter = TypedEventFilter<NFTListedEvent>;
-
-export interface NFTSoldEventObject {
-  itemId: BigNumber;
-  nftContract: string;
-  collectionName: string;
-  tokenId: BigNumber;
-  price: BigNumber;
-  seller: string;
-  owner: string;
-}
-export type NFTSoldEvent = TypedEvent<
-  [BigNumber, string, string, BigNumber, BigNumber, string, string],
-  NFTSoldEventObject
->;
-
-export type NFTSoldEventFilter = TypedEventFilter<NFTSoldEvent>;
 
 export interface NFTUnlistedEventObject {
   itemId: BigNumber;
@@ -567,6 +567,25 @@ export interface Marketplace extends BaseContract {
   };
 
   filters: {
+    "NFTBought(uint256,address,string,uint256,uint256,address,address)"(
+      itemId?: null,
+      nftContract?: null,
+      collectionName?: null,
+      tokenId?: null,
+      price?: null,
+      seller?: PromiseOrValue<string> | null,
+      owner?: PromiseOrValue<string> | null
+    ): NFTBoughtEventFilter;
+    NFTBought(
+      itemId?: null,
+      nftContract?: null,
+      collectionName?: null,
+      tokenId?: null,
+      price?: null,
+      seller?: PromiseOrValue<string> | null,
+      owner?: PromiseOrValue<string> | null
+    ): NFTBoughtEventFilter;
+
     "NFTListed(uint256,address,string,uint256,uint256,address,address)"(
       itemId?: null,
       nftContract?: null,
@@ -585,25 +604,6 @@ export interface Marketplace extends BaseContract {
       seller?: PromiseOrValue<string> | null,
       owner?: PromiseOrValue<string> | null
     ): NFTListedEventFilter;
-
-    "NFTSold(uint256,address,string,uint256,uint256,address,address)"(
-      itemId?: null,
-      nftContract?: null,
-      collectionName?: null,
-      tokenId?: null,
-      price?: null,
-      seller?: PromiseOrValue<string> | null,
-      owner?: PromiseOrValue<string> | null
-    ): NFTSoldEventFilter;
-    NFTSold(
-      itemId?: null,
-      nftContract?: null,
-      collectionName?: null,
-      tokenId?: null,
-      price?: null,
-      seller?: PromiseOrValue<string> | null,
-      owner?: PromiseOrValue<string> | null
-    ): NFTSoldEventFilter;
 
     "NFTUnlisted(uint256,address,string,uint256,uint256,address,address)"(
       itemId?: null,

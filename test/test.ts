@@ -20,10 +20,11 @@ const UNLISTED_ID = 3;
 const BUY_ID = 2;
 const UPDATE_PRICE_ID = 1;
 const REMAINING_IDS_AFTER_UNLISTED = [1, 2];
-const REMAINING_IDS_AFTER_BUY = [1];
 
-const PRICE = ethers.utils.parseEther('10'); // MATIC
-const UPDATED_PRICE = ethers.utils.parseEther('12'); // MATIC
+const PRICE = ethers.utils.parseEther('10');
+const FEE_PERCENT = 2;
+const PRICE_WITH_FEE = PRICE.mul(100 + FEE_PERCENT).div(100);
+const UPDATED_PRICE = ethers.utils.parseEther('12');
 
 describe('Keebit processes', function () {
   before(async () => {
@@ -33,7 +34,10 @@ describe('Keebit processes', function () {
     factoryContract = await Factory.deploy();
     await factoryContract.deployed();
 
-    marketplaceContract = await Marketplace.deploy(factoryContract.address, 2);
+    marketplaceContract = await Marketplace.deploy(
+      factoryContract.address,
+      FEE_PERCENT
+    );
     await marketplaceContract.deployed();
 
     [owner, vendor, peer] = await ethers.getSigners();
@@ -44,6 +48,11 @@ describe('Keebit processes', function () {
       await factoryContract.saveVendor(vendor.address);
       expect(await factoryContract.isVendor(vendor.address)).to.equal(true);
       expect(await factoryContract.isVendor(peer.address)).to.equal(false);
+    });
+    it('Should revert when non-owners call saveVendor()', async function () {
+      await expect(
+        factoryContract.connect(peer).saveVendor(peer.address)
+      ).to.be.revertedWith('Ownable: caller is not the owner');
     });
 
     it('Should create a new NFT collection and mint NFTs', async function () {
@@ -89,7 +98,7 @@ describe('Keebit processes', function () {
     });
   });
 
-  describe('List NFTs', function () {
+  describe('Marketplace functions', function () {
     it('Should list NFTs', async function () {
       // frontend should call this function
       await tokenContract
@@ -102,15 +111,26 @@ describe('Keebit processes', function () {
       // check that NFTs are transferred to marketplace contract
       const itemCount = await marketplaceContract.itemCount();
 
+      // check that NFTs are transferred to marketplace contract
       expect(
-        await tokenContract.balanceOf(marketplaceContract.address, 1)
+        await tokenContract.balanceOf(
+          marketplaceContract.address,
+          SELLING_IDS[0]
+        )
       ).to.be.equal(1);
       expect(
-        await tokenContract.balanceOf(marketplaceContract.address, 2)
+        await tokenContract.balanceOf(
+          marketplaceContract.address,
+          SELLING_IDS[1]
+        )
       ).to.equal(1);
       expect(
-        await tokenContract.balanceOf(marketplaceContract.address, 3)
+        await tokenContract.balanceOf(
+          marketplaceContract.address,
+          SELLING_IDS[2]
+        )
       ).to.equal(1);
+
       // check that itemId is the same itemCount
       expect((await marketplaceContract.nfts(itemCount)).itemId).to.equal(
         itemCount
@@ -126,9 +146,7 @@ describe('Keebit processes', function () {
       // check that event NFTListed is emitted
       expect(result).to.emit(marketplaceContract, 'NFTListed');
     });
-  });
 
-  describe('Get my listing NFTs', function () {
     it('Should get all my NFTs selling in the marketplace', async function () {
       const listedNFTs = await marketplaceContract
         .connect(vendor)
@@ -158,12 +176,10 @@ describe('Keebit processes', function () {
         expect(isOfficial).to.equal(true);
         expect(isOnList).to.equal(true);
       }
-      expect(itemIds).to.deep.equal(SELLING_IDS);
+      expect(itemIds).to.deep.equal([1, 2, 3]);
       expect(tokenIds).to.deep.equal(SELLING_IDS);
     });
-  });
 
-  describe('Unlist NFTs', function () {
     it('Should unlist NFTs', async function () {
       await marketplaceContract.connect(vendor).unlistNFT(UNLISTED_ID);
 
@@ -173,17 +189,97 @@ describe('Keebit processes', function () {
 
       expect(listedNFTs.length).to.equal(REMAINING_IDS_AFTER_UNLISTED.length);
     });
-  });
 
-  // PEER buy 1 NFT
-  // PEER list 1 NFT
+    it('Should buy NFTs by peer', async function () {
+      // case 1: enough balance
+      const msgValue = PRICE_WITH_FEE;
+      const sellerBalanceBefore = await vendor.getBalance();
+      const buyerBalanceBefore = await peer.getBalance();
+      const ownerBalanceBefore = await owner.getBalance();
+      const itemOnListBefore = await marketplaceContract.itemOnList();
+      const itemOnListAfter = await marketplaceContract.itemOnList();
 
-  describe('Get listing NFTs', function () {
+      const result = await marketplaceContract.connect(peer).buyNFT(BUY_ID, {
+        value: msgValue,
+      });
+
+      const sellerBalanceAfter = await vendor.getBalance();
+      const buyerBalanceAfter = await peer.getBalance();
+      const ownerBalanceAfter = await owner.getBalance();
+
+      // check that buyer get paid = NFT price
+      expect(sellerBalanceAfter.sub(sellerBalanceBefore)).to.equal(PRICE);
+
+      // check that marketplace owner get paid = fee
+      expect(ownerBalanceAfter.sub(ownerBalanceBefore)).to.equal(
+        PRICE_WITH_FEE.sub(PRICE)
+      );
+
+      // check that buyer paid = NFT price + fee
+      expect(buyerBalanceBefore.sub(buyerBalanceAfter))
+        .to.be.above(PRICE_WITH_FEE)
+        .but.below(
+          PRICE_WITH_FEE.add(ethers.utils.parseUnits('2100000', 'gwei'))
+        );
+
+      // check that NFT is transferred from marketplace to buyer
+      expect(await tokenContract.balanceOf(peer.address, BUY_ID)).to.equal(1);
+      expect(
+        await tokenContract.balanceOf(marketplaceContract.address, BUY_ID)
+      ).to.equal(0);
+
+      //check that NFT is not on list anymore
+      expect((await marketplaceContract.nfts(BUY_ID)).isOnList).to.equal(false);
+
+      //check that the owner attribute of NFT is buyer
+      expect((await marketplaceContract.nfts(BUY_ID)).owner).to.equal(
+        peer.address
+      );
+
+      // check that event NFTBought is emitted
+      expect(result).to.emit(marketplaceContract, 'NFTBought');
+    });
+
+    it('Should list NFTs by peer', async function () {
+      // frontend should call this function
+      await tokenContract
+        .connect(peer)
+        .setApprovalForAll(marketplaceContract.address, true);
+      // smart contract begins from here
+      const result = await marketplaceContract
+        .connect(peer)
+        .listNFTs(tokenContract.address, [BUY_ID], PRICE);
+      // check that NFTs are transferred to marketplace contract
+      const itemCount = await marketplaceContract.itemCount();
+
+      // check that NFTs are transferred to marketplace contract
+      expect(
+        await tokenContract.balanceOf(marketplaceContract.address, BUY_ID)
+      ).to.be.equal(1);
+
+      // check that itemId is the same itemCount
+      expect((await marketplaceContract.nfts(itemCount)).itemId).to.equal(
+        itemCount
+      );
+      // check that isOnlist = true
+      expect((await marketplaceContract.nfts(itemCount)).isOnList).to.equal(
+        true
+      );
+      // check that isOfficial = true
+      expect((await marketplaceContract.nfts(itemCount)).isOfficial).to.equal(
+        false
+      );
+      // check that event NFTListed is emitted
+      expect(result).to.emit(marketplaceContract, 'NFTListed');
+    });
+
     it('Should get all NFTs selling in the marketplace', async function () {
       const listedNFTs = await marketplaceContract.getListedNFTs();
 
       const itemIds = [];
       const tokenIds = [];
+      const sellers = [];
+      const isOfficials = [];
       for (const nft of listedNFTs) {
         const [
           itemId,
@@ -201,17 +297,17 @@ describe('Keebit processes', function () {
         expect(collectionName).to.equal(COLLECTION_NAME);
         tokenIds.push(tokenId);
         expect(price).to.equal(PRICE);
-        expect(seller).to.equal(vendor.address);
+        sellers.push(seller);
         expect(owner).to.equal(marketplaceContract.address);
-        expect(isOfficial).to.equal(true);
+        isOfficials.push(isOfficial);
         expect(isOnList).to.equal(true);
       }
-      expect(itemIds).to.deep.equal(REMAINING_IDS_AFTER_UNLISTED);
+      expect(itemIds).to.deep.equal([1, 4]);
       expect(tokenIds).to.deep.equal(REMAINING_IDS_AFTER_UNLISTED);
+      expect(sellers).to.deep.equal([vendor.address, peer.address]);
+      expect(isOfficials).to.deep.equal([true, false]);
     });
-  });
 
-  describe('Update price', function () {
     it('Should update an NFT price', async function () {
       await marketplaceContract
         .connect(vendor)
