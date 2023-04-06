@@ -1,9 +1,9 @@
-import { expect } from 'chai';
-import { ethers } from 'hardhat';
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { Factory } from '../typechain-types/';
-import { Marketplace } from '../typechain-types/';
-import { Token } from '../typechain-types/';
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { Factory } from "../typechain-types/";
+import { Marketplace } from "../typechain-types/";
+import { Token } from "../typechain-types/";
 
 let marketplaceContract: Marketplace;
 let factoryContract: Factory;
@@ -12,8 +12,8 @@ let owner: SignerWithAddress;
 let vendor: SignerWithAddress;
 let peer: SignerWithAddress;
 
-const COLLECTION_NAME = 'KeebitCollection';
-const URI = 'https://keebit.com/token/1';
+const COLLECTION_NAME = "KeebitCollection";
+const URI = "https://keebit.com/token/1";
 
 const SELLING_IDS = [1, 2, 3];
 const UNLISTED_ID = 3;
@@ -21,15 +21,15 @@ const BUY_ID = 2;
 const UPDATE_PRICE_ID = 1;
 const REMAINING_IDS_AFTER_UNLISTED = [1, 2];
 
-const PRICE = ethers.utils.parseEther('10');
+const PRICE = ethers.utils.parseEther("10");
 const FEE_PERCENT = 2;
 const PRICE_WITH_FEE = PRICE.mul(100 + FEE_PERCENT).div(100);
-const UPDATED_PRICE = ethers.utils.parseEther('12');
+const UPDATED_PRICE = ethers.utils.parseEther("12");
 
-describe('Keebit processes', function () {
+describe("Keebit processes", function () {
   before(async () => {
-    const Factory = await ethers.getContractFactory('Factory');
-    const Marketplace = await ethers.getContractFactory('Marketplace');
+    const Factory = await ethers.getContractFactory("Factory");
+    const Marketplace = await ethers.getContractFactory("Marketplace");
 
     factoryContract = await Factory.deploy();
     await factoryContract.deployed();
@@ -43,26 +43,26 @@ describe('Keebit processes', function () {
     [owner, vendor, peer] = await ethers.getSigners();
   });
 
-  describe('Create NFT collection', async function () {
-    it('Should save vendor address', async function () {
+  describe("Create NFT collection", async function () {
+    it("Should save vendor address", async function () {
       await factoryContract.saveVendor(vendor.address);
       expect(await factoryContract.isVendor(vendor.address)).to.equal(true);
       expect(await factoryContract.isVendor(peer.address)).to.equal(false);
     });
-    it('Should revert when non-owners call saveVendor()', async function () {
+    it("Should revert when non-owners call saveVendor()", async function () {
       await expect(
         factoryContract.connect(peer).saveVendor(peer.address)
-      ).to.be.revertedWith('Ownable: caller is not the owner');
+      ).to.be.revertedWith("Ownable: caller is not the owner");
     });
 
-    it('Should create a new NFT collection and mint NFTs', async function () {
+    it("Should create a new NFT collection and mint NFTs", async function () {
       const result = await factoryContract
         .connect(vendor)
         .createNFT(COLLECTION_NAME, URI, SELLING_IDS);
 
       // Check token contract deployment
       tokenContract = await ethers.getContractAt(
-        'Token',
+        "Token",
         await factoryContract.tokens(0)
       );
       expect(await tokenContract.ids(0)).to.equal(SELLING_IDS[0]);
@@ -71,7 +71,7 @@ describe('Keebit processes', function () {
       expect(await tokenContract.collectionName()).to.equal(COLLECTION_NAME);
 
       // Check TokenDeployed event emitting
-      expect(result).to.emit(factoryContract, 'TokenDeployed');
+      expect(result).to.emit(factoryContract, "TokenDeployed");
 
       // Check minting
       for (let i = 0; i < SELLING_IDS.length; i++) {
@@ -82,8 +82,8 @@ describe('Keebit processes', function () {
     });
   });
 
-  describe('Get all NFTs in my wallet', async function () {
-    it('Should get all my NFTs in the token contracts contains in the factory contract', async function () {
+  describe("Get all NFTs in my wallet", async function () {
+    it("Should get all my NFTs in the token contracts contains in the factory contract", async function () {
       const nfts = await factoryContract.connect(vendor).getMyNFTs();
 
       const ids = [];
@@ -98,8 +98,8 @@ describe('Keebit processes', function () {
     });
   });
 
-  describe('Marketplace functions', function () {
-    it('Should list NFTs', async function () {
+  describe("Marketplace functions", function () {
+    it("Should list NFTs", async function () {
       // frontend should call this function
       await tokenContract
         .connect(vendor)
@@ -144,10 +144,10 @@ describe('Keebit processes', function () {
         true
       );
       // check that event NFTListed is emitted
-      expect(result).to.emit(marketplaceContract, 'NFTListed');
+      expect(result).to.emit(marketplaceContract, "NFTListed");
     });
 
-    it('Should get all my NFTs selling in the marketplace', async function () {
+    it("Should get all my NFTs selling in the marketplace", async function () {
       const listedNFTs = await marketplaceContract
         .connect(vendor)
         .getMyListedNFTs();
@@ -180,17 +180,20 @@ describe('Keebit processes', function () {
       expect(tokenIds).to.deep.equal(SELLING_IDS);
     });
 
-    it('Should unlist NFTs', async function () {
-      await marketplaceContract.connect(vendor).unlistNFT(UNLISTED_ID);
+    it("Should unlist NFTs", async function () {
+      const result = await marketplaceContract
+        .connect(vendor)
+        .unlistNFT(UNLISTED_ID);
 
       const listedNFTs = await marketplaceContract
         .connect(vendor)
         .getMyListedNFTs();
 
       expect(listedNFTs.length).to.equal(REMAINING_IDS_AFTER_UNLISTED.length);
+      expect(result).to.emit(marketplaceContract, "NFTUnlisted");
     });
 
-    it('Should buy NFTs by peer', async function () {
+    it("Should buy NFTs by peer", async function () {
       // case 1: enough balance
       const msgValue = PRICE_WITH_FEE;
       const sellerBalanceBefore = await vendor.getBalance();
@@ -219,7 +222,7 @@ describe('Keebit processes', function () {
       expect(buyerBalanceBefore.sub(buyerBalanceAfter))
         .to.be.above(PRICE_WITH_FEE)
         .but.below(
-          PRICE_WITH_FEE.add(ethers.utils.parseUnits('2100000', 'gwei'))
+          PRICE_WITH_FEE.add(ethers.utils.parseUnits("2100000", "gwei"))
         );
 
       // check that NFT is transferred from marketplace to buyer
@@ -240,10 +243,10 @@ describe('Keebit processes', function () {
       expect(itemOnListBefore.sub(itemOnListAfter)).to.equal(1);
 
       // check that event NFTBought is emitted
-      expect(result).to.emit(marketplaceContract, 'NFTBought');
+      expect(result).to.emit(marketplaceContract, "NFTBought");
     });
 
-    it('Should list NFTs by peer', async function () {
+    it("Should list NFTs by peer", async function () {
       // frontend should call this function
       await tokenContract
         .connect(peer)
@@ -273,10 +276,10 @@ describe('Keebit processes', function () {
         false
       );
       // check that event NFTListed is emitted
-      expect(result).to.emit(marketplaceContract, 'NFTListed');
+      expect(result).to.emit(marketplaceContract, "NFTListed");
     });
 
-    it('Should get all NFTs selling in the marketplace', async function () {
+    it("Should get all NFTs selling in the marketplace", async function () {
       const listedNFTs = await marketplaceContract.getListedNFTs();
 
       const itemIds = [];
@@ -311,13 +314,13 @@ describe('Keebit processes', function () {
       expect(isOfficials).to.deep.equal([true, false]);
     });
 
-    it('Should update an NFT price', async function () {
+    it("Should update an NFT price", async function () {
       await marketplaceContract
         .connect(vendor)
         .updatePrice(UPDATE_PRICE_ID, UPDATED_PRICE);
     });
 
-    it('Should return new price when calling getMyListedNFTs', async function () {
+    it("Should return new price when calling getMyListedNFTs", async function () {
       const listedNFTs = await marketplaceContract
         .connect(vendor)
         .getMyListedNFTs();
