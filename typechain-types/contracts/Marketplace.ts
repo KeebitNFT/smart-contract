@@ -79,7 +79,7 @@ export interface MarketplaceInterface extends utils.Interface {
     "onERC1155Received(address,address,uint256,uint256,bytes)": FunctionFragment;
     "owner()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
-    "unlistNFT(address,uint256)": FunctionFragment;
+    "unlistNFT(uint256)": FunctionFragment;
     "updatePrice(uint256,uint256)": FunctionFragment;
   };
 
@@ -163,7 +163,7 @@ export interface MarketplaceInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "unlistNFT",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "updatePrice",
@@ -371,7 +371,6 @@ export interface Marketplace extends BaseContract {
     ): Promise<[boolean]>;
 
     unlistNFT(
-      _nftContract: PromiseOrValue<string>,
       _itemId: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -464,7 +463,6 @@ export interface Marketplace extends BaseContract {
   ): Promise<boolean>;
 
   unlistNFT(
-    _nftContract: PromiseOrValue<string>,
     _itemId: PromiseOrValue<BigNumberish>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -557,7 +555,6 @@ export interface Marketplace extends BaseContract {
     ): Promise<boolean>;
 
     unlistNFT(
-      _nftContract: PromiseOrValue<string>,
       _itemId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -566,7 +563,7 @@ export interface Marketplace extends BaseContract {
       _itemId: PromiseOrValue<BigNumberish>,
       _newPrice: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<void>;
   };
 
   filters: {
@@ -684,7 +681,6 @@ export interface Marketplace extends BaseContract {
     ): Promise<BigNumber>;
 
     unlistNFT(
-      _nftContract: PromiseOrValue<string>,
       _itemId: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -752,7 +748,6 @@ export interface Marketplace extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     unlistNFT(
-      _nftContract: PromiseOrValue<string>,
       _itemId: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

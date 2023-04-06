@@ -3,7 +3,6 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 import "hardhat/console.sol";
 import "./Factory.sol";
@@ -57,8 +56,8 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         address indexed owner
     );
 
-    constructor(address _factory, uint _feePercent) {
-        factory = Factory(_factory);
+    constructor(address factoryAddress, uint _feePercent) {
+        factory = Factory(factoryAddress);
         owner = payable(msg.sender);
         feePercent = _feePercent;
     }
@@ -66,7 +65,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
     // list nft or NFTs
     function listNFTs(
         address _nftContract,
-        uint[] memory _tokenIds,
+        uint[] calldata _tokenIds,
         uint _price
     ) external nonReentrant returns (address) {
         require(
@@ -78,9 +77,8 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
         for (uint i = 0; i < _tokenIds.length; i++) {
             _list(Token(_nftContract), _tokenIds[i], _price);
-            // console.log("token id: %s", _tokenIds[i]);
         }
-        return address(_nftContract);
+        return _nftContract;
     }
 
     function _list(Token _nftContract, uint _tokenId, uint _price) private {
@@ -158,13 +156,10 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         );
     }
 
-    function unlistNFT(
-        Token _nftContract,
-        uint _itemId
-    ) external payable nonReentrant {
+    function unlistNFT(uint _itemId) external payable nonReentrant {
         require(nfts[_itemId].isOnList, "item is not listed");
-        require(msg.sender == nfts[_itemId].seller, "only seller can unlist");
-        _nftContract.safeTransferFrom(
+        require(msg.sender == nfts[_itemId].seller, "msg.sender is not seller");
+        Token(nfts[_itemId].nftContract).safeTransferFrom(
             address(this),
             msg.sender,
             nfts[_itemId].tokenId,
@@ -179,8 +174,8 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
         emit NFTUnlisted(
             _itemId,
-            address(_nftContract),
-            _nftContract.collectionName(),
+            nfts[_itemId].nftContract,
+            Token(nfts[_itemId].nftContract).collectionName(),
             nfts[_itemId].tokenId,
             nfts[_itemId].price,
             nfts[_itemId].seller,
@@ -225,9 +220,8 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         return (myListedNFTs);
     }
 
-    function updatePrice(uint _itemId, uint _newPrice) external returns (uint) {
+    function updatePrice(uint _itemId, uint _newPrice) external {
         require(_newPrice > 0, "Price must be at least 1 wei");
         nfts[_itemId].price = _newPrice;
-        return (_newPrice);
     }
 }

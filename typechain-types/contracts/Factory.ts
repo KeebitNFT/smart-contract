@@ -45,6 +45,7 @@ export declare namespace Factory {
 
 export interface FactoryInterface extends utils.Interface {
   functions: {
+    "countMyNFTs()": FunctionFragment;
     "createNFT(string,string,uint256[])": FunctionFragment;
     "getMyNFTs()": FunctionFragment;
     "isToken(address)": FunctionFragment;
@@ -58,6 +59,7 @@ export interface FactoryInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "countMyNFTs"
       | "createNFT"
       | "getMyNFTs"
       | "isToken"
@@ -69,6 +71,10 @@ export interface FactoryInterface extends utils.Interface {
       | "transferOwnership"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "countMyNFTs",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "createNFT",
     values: [
@@ -104,6 +110,10 @@ export interface FactoryInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "countMyNFTs",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "createNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getMyNFTs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isToken", data: BytesLike): Result;
@@ -193,8 +203,10 @@ export interface Factory extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    countMyNFTs(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     createNFT(
-      _contractName: PromiseOrValue<string>,
+      _collectionName: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -236,8 +248,10 @@ export interface Factory extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  countMyNFTs(overrides?: CallOverrides): Promise<BigNumber>;
+
   createNFT(
-    _contractName: PromiseOrValue<string>,
+    _collectionName: PromiseOrValue<string>,
     _uri: PromiseOrValue<string>,
     _ids: PromiseOrValue<BigNumberish>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -279,8 +293,10 @@ export interface Factory extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    countMyNFTs(overrides?: CallOverrides): Promise<BigNumber>;
+
     createNFT(
-      _contractName: PromiseOrValue<string>,
+      _collectionName: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
@@ -349,8 +365,10 @@ export interface Factory extends BaseContract {
   };
 
   estimateGas: {
+    countMyNFTs(overrides?: CallOverrides): Promise<BigNumber>;
+
     createNFT(
-      _contractName: PromiseOrValue<string>,
+      _collectionName: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -391,8 +409,10 @@ export interface Factory extends BaseContract {
   };
 
   populateTransaction: {
+    countMyNFTs(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     createNFT(
-      _contractName: PromiseOrValue<string>,
+      _collectionName: PromiseOrValue<string>,
       _uri: PromiseOrValue<string>,
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }

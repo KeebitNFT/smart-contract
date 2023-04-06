@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/amita/Code/Keebit/smart-contract/contracts/Factory.sol": {
-      "lastModificationDate": 1680630395183,
-      "contentHash": "73eb50e7f7dc881871366eaadcdfecb9",
+      "lastModificationDate": 1680795321430,
+      "contentHash": "8d6d89419a3fda40107e49eb02246c26",
       "sourceName": "contracts/Factory.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -42,8 +42,8 @@
       ]
     },
     "/Users/amita/Code/Keebit/smart-contract/contracts/Token.sol": {
-      "lastModificationDate": 1680608606675,
-      "contentHash": "86eae381073e7caa9da1f980bc66f384",
+      "lastModificationDate": 1680795321430,
+      "contentHash": "0681f28d0eee4a1080a85a121bb07204",
       "sourceName": "contracts/Token.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -190,43 +190,6 @@
         "IERC1155Receiver"
       ]
     },
-    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/Strings.sol": {
-      "lastModificationDate": 1679564643629,
-      "contentHash": "396031251978f8febfd90cb62cb240ec",
-      "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
-      "solcConfig": {
-        "version": "0.8.18",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./math/Math.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Strings"
-      ]
-    },
     "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/token/ERC1155/ERC1155.sol": {
       "lastModificationDate": 1679564643619,
       "contentHash": "447816f3d93d639006eb423c33d2ca2c",
@@ -269,80 +232,10 @@
         "ERC1155"
       ]
     },
-    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/Context.sol": {
-      "lastModificationDate": 1679564643617,
-      "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
-      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
-      "solcConfig": {
-        "version": "0.8.18",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Context"
-      ]
-    },
-    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/math/Math.sol": {
-      "lastModificationDate": 1679564643627,
-      "contentHash": "b9c58920ce74d6dc819161786112e7ee",
-      "sourceName": "@openzeppelin/contracts/utils/math/Math.sol",
-      "solcConfig": {
-        "version": "0.8.18",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Math"
-      ]
-    },
-    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
-      "lastModificationDate": 1679564643619,
-      "contentHash": "0e7db055ce108f9da7bb6686a00287c0",
-      "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
+    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/Strings.sol": {
+      "lastModificationDate": 1679564643629,
+      "contentHash": "396031251978f8febfd90cb62cb240ec",
+      "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
       "solcConfig": {
         "version": "0.8.18",
         "settings": {
@@ -367,13 +260,13 @@
         }
       },
       "imports": [
-        "./IERC165.sol"
+        "./math/Math.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "ERC165"
+        "Strings"
       ]
     },
     "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/token/ERC1155/IERC1155.sol": {
@@ -450,6 +343,78 @@
         "IERC1155MetadataURI"
       ]
     },
+    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1679564643617,
+      "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+      "lastModificationDate": 1679564643619,
+      "contentHash": "0e7db055ce108f9da7bb6686a00287c0",
+      "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC165"
+      ]
+    },
     "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/Address.sol": {
       "lastModificationDate": 1679564643616,
       "contentHash": "f31ad6fc4bbf9c06203987220156a6ba",
@@ -520,53 +485,10 @@
         "IERC165"
       ]
     },
-    "/Users/amita/Code/Keebit/smart-contract/contracts/Marketplace.sol": {
-      "lastModificationDate": 1680793366215,
-      "contentHash": "1ff7bc3d4afa8df1b6d76236eae8d4a3",
-      "sourceName": "contracts/Marketplace.sol",
-      "solcConfig": {
-        "version": "0.8.18",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/security/ReentrancyGuard.sol",
-        "@openzeppelin/contracts/utils/Counters.sol",
-        "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol",
-        "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol",
-        "hardhat/console.sol",
-        "./Factory.sol",
-        "./Token.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.17"
-      ],
-      "artifacts": [
-        "Marketplace"
-      ]
-    },
-    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/Counters.sol": {
-      "lastModificationDate": 1679564643617,
-      "contentHash": "74654e3ae5d7f39555055dfe244dab7a",
-      "sourceName": "@openzeppelin/contracts/utils/Counters.sol",
+    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/math/Math.sol": {
+      "lastModificationDate": 1679564643627,
+      "contentHash": "b9c58920ce74d6dc819161786112e7ee",
+      "sourceName": "@openzeppelin/contracts/utils/math/Math.sol",
       "solcConfig": {
         "version": "0.8.18",
         "settings": {
@@ -595,7 +517,49 @@
         "^0.8.0"
       ],
       "artifacts": [
-        "Counters"
+        "Math"
+      ]
+    },
+    "/Users/amita/Code/Keebit/smart-contract/contracts/Marketplace.sol": {
+      "lastModificationDate": 1680795588398,
+      "contentHash": "55afb322f6eb83cd3a16e16ba31ccdfc",
+      "sourceName": "contracts/Marketplace.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/security/ReentrancyGuard.sol",
+        "@openzeppelin/contracts/utils/Counters.sol",
+        "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol",
+        "hardhat/console.sol",
+        "./Factory.sol",
+        "./Token.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.17"
+      ],
+      "artifacts": [
+        "Marketplace"
       ]
     },
     "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol": {
@@ -631,6 +595,41 @@
       ],
       "artifacts": [
         "ReentrancyGuard"
+      ]
+    },
+    "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/utils/Counters.sol": {
+      "lastModificationDate": 1679564643617,
+      "contentHash": "74654e3ae5d7f39555055dfe244dab7a",
+      "sourceName": "@openzeppelin/contracts/utils/Counters.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Counters"
       ]
     },
     "/Users/amita/Code/Keebit/smart-contract/node_modules/@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol": {
