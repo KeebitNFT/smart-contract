@@ -12,7 +12,7 @@ contract Factory is Ownable {
     mapping(address => bool) public isVendor;
 
     struct FactoryNFT {
-        address tokenAddress;
+        address nftContract;
         string collectionName;
         string uri;
         uint tokenId;

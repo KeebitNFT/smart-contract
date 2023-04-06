@@ -19,6 +19,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         uint itemId;
         address nftContract;
         string collectionName;
+        string uri;
         uint tokenId;
         uint price;
         address payable seller;
@@ -97,6 +98,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             itemCount,
             address(_nftContract),
             _nftContract.collectionName(),
+            _nftContract.uri(0),
             _tokenId,
             _price,
             payable(msg.sender),
