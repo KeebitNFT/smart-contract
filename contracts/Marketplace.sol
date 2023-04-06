@@ -18,7 +18,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
     struct MarketNFT {
         uint itemId;
-        Token nftContract;
+        address nftContract;
         string collectionName;
         uint tokenId;
         uint price;
@@ -31,7 +31,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
     event NFTListed(
         uint itemId,
-        Token nftContract,
+        address nftContract,
         string collectionName,
         uint tokenId,
         uint price,
@@ -40,16 +40,16 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
     );
     event NFTUnlisted(
         uint itemId,
-        Token nftContract,
+        address nftContract,
         string collectionName,
         uint tokenId,
         uint price,
         address indexed seller,
         address indexed owner
     );
-    event NFTSold(
+    event NFTBought(
         uint itemId,
-        Token nftContract,
+        address nftContract,
         string collectionName,
         uint tokenId,
         uint price,
@@ -97,7 +97,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         bool _isOnlist = true;
         nfts[itemCount] = MarketNFT(
             itemCount,
-            _nftContract,
+            address(_nftContract),
             _nftContract.collectionName(),
             _tokenId,
             _price,
@@ -108,7 +108,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         );
         emit NFTListed(
             itemCount,
-            _nftContract,
+            address(_nftContract),
             _nftContract.collectionName(),
             _tokenId,
             _price,
@@ -134,7 +134,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
         // Transfer nft to buyer
         address payable buyer = payable(msg.sender);
-        nft.nftContract.safeTransferFrom(
+        Token(nft.nftContract).safeTransferFrom(
             address(this),
             buyer,
             nft.tokenId,
@@ -148,10 +148,10 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
         itemOnList--;
 
-        emit NFTSold(
+        emit NFTBought(
             _itemId,
             nft.nftContract,
-            nft.nftContract.collectionName(),
+            Token(nft.nftContract).collectionName(),
             nft.tokenId,
             msg.value,
             nft.seller,
@@ -181,7 +181,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
         emit NFTUnlisted(
             _itemId,
-            _nftContract,
+            address(_nftContract),
             _nftContract.collectionName(),
             nft.tokenId,
             nft.price,
