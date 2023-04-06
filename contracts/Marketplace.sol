@@ -120,42 +120,41 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
     // Buy nft
     function buyNFT(uint _itemId) external payable nonReentrant {
         uint _totalPrice = _getTotalPrice(_itemId);
-        MarketNFT memory nft = nfts[_itemId];
         require(_itemId > 0 && _itemId <= itemCount, "item doesn't exist");
-        require(nft.isOnList, "item is not for sale");
+        require(nfts[_itemId].isOnList, "item is not for sale");
         require(
             msg.value >= _totalPrice,
             "not enough ether for this transaction"
         );
 
         // Pay seller and owner
-        nft.seller.transfer(nft.price);
-        owner.transfer(_totalPrice - nft.price);
+        nfts[_itemId].seller.transfer(nfts[_itemId].price);
+        owner.transfer(_totalPrice - nfts[_itemId].price);
 
         // Transfer nft to buyer
         address payable buyer = payable(msg.sender);
-        Token(nft.nftContract).safeTransferFrom(
+        Token(nfts[_itemId].nftContract).safeTransferFrom(
             address(this),
             buyer,
-            nft.tokenId,
+            nfts[_itemId].tokenId,
             1,
             ""
         );
 
         // Update nft info
-        nft.owner = buyer;
-        nft.isOnList = false;
+        nfts[_itemId].owner = buyer;
+        nfts[_itemId].isOnList = false;
 
         itemOnList--;
 
         emit NFTBought(
             _itemId,
-            nft.nftContract,
-            Token(nft.nftContract).collectionName(),
-            nft.tokenId,
+            nfts[_itemId].nftContract,
+            Token(nfts[_itemId].nftContract).collectionName(),
+            nfts[_itemId].tokenId,
             msg.value,
-            nft.seller,
-            nft.owner
+            nfts[_itemId].seller,
+            nfts[_itemId].owner
         );
     }
 
@@ -163,30 +162,29 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         Token _nftContract,
         uint _itemId
     ) external payable nonReentrant {
-        MarketNFT memory nft = nfts[_itemId];
-        require(nft.isOnList, "item is not listed");
-        require(msg.sender == nft.seller);
+        require(nfts[_itemId].isOnList, "item is not listed");
+        require(msg.sender == nfts[_itemId].seller, "only seller can unlist");
         _nftContract.safeTransferFrom(
             address(this),
             msg.sender,
-            nft.tokenId,
+            nfts[_itemId].tokenId,
             1,
             ""
         );
 
         itemOnList--;
 
-        nft.owner = payable(msg.sender);
-        nft.isOnList = false;
+        nfts[_itemId].owner = payable(msg.sender);
+        nfts[_itemId].isOnList = false;
 
         emit NFTUnlisted(
             _itemId,
             address(_nftContract),
             _nftContract.collectionName(),
-            nft.tokenId,
-            nft.price,
-            nft.seller,
-            nft.owner
+            nfts[_itemId].tokenId,
+            nfts[_itemId].price,
+            nfts[_itemId].seller,
+            nfts[_itemId].owner
         );
     }
 

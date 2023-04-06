@@ -133,7 +133,6 @@ describe("Keebit processes", function () {
       const buyerBalanceBefore = await peer.getBalance();
       const ownerBalanceBefore = await owner.getBalance();
       const itemOnListBefore = await marketplaceContract.itemOnList();
-      const itemOnListAfter = await marketplaceContract.itemOnList();
 
       const result = await marketplaceContract
         .connect(peer)
@@ -144,6 +143,7 @@ describe("Keebit processes", function () {
       const sellerBalanceAfter = await vendor.getBalance();
       const buyerBalanceAfter = await peer.getBalance();
       const ownerBalanceAfter = await owner.getBalance();
+      const itemOnListAfter = await marketplaceContract.itemOnList();
 
       // check that buyer get paid = NFT price
       expect(sellerBalanceAfter.sub(sellerBalanceBefore)).to.equal(PRICE);
@@ -176,6 +176,9 @@ describe("Keebit processes", function () {
 
       //check that the owner attribute of NFT is buyer
       expect((await marketplaceContract.nfts(1)).owner).to.equal(peer.address);
+
+      // check that # itemOnlist is decreased by 1
+      expect(itemOnListBefore.sub(itemOnListAfter)).to.equal(1);
 
       // check that event NFTBought is emitted
       expect(result).to.emit(marketplaceContract, "NFTBought");
