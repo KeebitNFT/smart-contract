@@ -100,7 +100,7 @@ contract Factory is Ownable {
                     myNFTs[counter] = (
                         FactoryNFT(
                             address(tokens[i]),
-                            tokens[i].collectionName(),
+                            tokens[i].name(),
                             tokens[i].uri(1),
                             k + 1
                         )

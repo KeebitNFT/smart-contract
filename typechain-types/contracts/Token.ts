@@ -32,11 +32,11 @@ export interface TokenInterface extends utils.Interface {
   functions: {
     "balanceOf(address,uint256)": FunctionFragment;
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
-    "collectionName()": FunctionFragment;
     "countNFT()": FunctionFragment;
     "ids(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mintBatch(address,uint256[])": FunctionFragment;
+    "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)": FunctionFragment;
@@ -51,11 +51,11 @@ export interface TokenInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "balanceOf"
       | "balanceOfBatch"
-      | "collectionName"
       | "countNFT"
       | "ids"
       | "isApprovedForAll"
       | "mintBatch"
+      | "name"
       | "owner"
       | "renounceOwnership"
       | "safeBatchTransferFrom"
@@ -74,10 +74,6 @@ export interface TokenInterface extends utils.Interface {
     functionFragment: "balanceOfBatch",
     values: [PromiseOrValue<string>[], PromiseOrValue<BigNumberish>[]]
   ): string;
-  encodeFunctionData(
-    functionFragment: "collectionName",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "countNFT", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ids",
@@ -91,6 +87,7 @@ export interface TokenInterface extends utils.Interface {
     functionFragment: "mintBatch",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>[]]
   ): string;
+  encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -138,10 +135,6 @@ export interface TokenInterface extends utils.Interface {
     functionFragment: "balanceOfBatch",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "collectionName",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "countNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ids", data: BytesLike): Result;
   decodeFunctionResult(
@@ -149,6 +142,7 @@ export interface TokenInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mintBatch", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -290,8 +284,6 @@ export interface Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber[]]>;
 
-    collectionName(overrides?: CallOverrides): Promise<[string]>;
-
     countNFT(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     ids(
@@ -310,6 +302,8 @@ export interface Token extends BaseContract {
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    name(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -369,8 +363,6 @@ export interface Token extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
-  collectionName(overrides?: CallOverrides): Promise<string>;
-
   countNFT(overrides?: CallOverrides): Promise<BigNumber>;
 
   ids(
@@ -389,6 +381,8 @@ export interface Token extends BaseContract {
     _ids: PromiseOrValue<BigNumberish>[],
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  name(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -448,8 +442,6 @@ export interface Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    collectionName(overrides?: CallOverrides): Promise<string>;
-
     countNFT(overrides?: CallOverrides): Promise<BigNumber>;
 
     ids(
@@ -468,6 +460,8 @@ export interface Token extends BaseContract {
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
+
+    name(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -584,8 +578,6 @@ export interface Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    collectionName(overrides?: CallOverrides): Promise<BigNumber>;
-
     countNFT(overrides?: CallOverrides): Promise<BigNumber>;
 
     ids(
@@ -604,6 +596,8 @@ export interface Token extends BaseContract {
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    name(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -664,8 +658,6 @@ export interface Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    collectionName(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     countNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ids(
@@ -684,6 +676,8 @@ export interface Token extends BaseContract {
       _ids: PromiseOrValue<BigNumberish>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
