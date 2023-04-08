@@ -1,19 +1,17 @@
-import { ethers } from "hardhat";
+import { ethers } from 'hardhat';
 
 async function main() {
-  const [deployer] = await ethers.getSigners();
-
   // deploy contracts
-  const Factory = await ethers.getContractFactory("Factory");
+  const Factory = await ethers.getContractFactory('Factory');
   const factory = await Factory.deploy();
   await factory.deployed();
 
-  const Marketplace = await ethers.getContractFactory("Marketplace");
-  const marketplace = await Marketplace.deploy(factory.address, 5); // specify argument _feePercent
+  const Marketplace = await ethers.getContractFactory('Marketplace');
+  const marketplace = await Marketplace.deploy(factory.address, 5);
   await marketplace.deployed();
 
-  console.log("Deployed contracts to", deployer.address);
-  console.log("Account balance:", (await deployer.getBalance()).toString());
+  console.log('Factory address:', factory.address);
+  console.log('Marketplace address:', marketplace.address);
 }
 
 main()
