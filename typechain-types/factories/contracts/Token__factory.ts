@@ -18,7 +18,7 @@ const _abi = [
     inputs: [
       {
         internalType: "string",
-        name: "_collectionName",
+        name: "_name",
         type: "string",
       },
       {
@@ -222,19 +222,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "collectionName",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "countNFT",
     outputs: [
       {
@@ -311,6 +298,19 @@ const _abi = [
       },
     ],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "name",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -491,30 +491,20 @@ export class Token__factory extends ContractFactory {
   }
 
   override deploy(
-    _collectionName: PromiseOrValue<string>,
+    _name: PromiseOrValue<string>,
     _uri: PromiseOrValue<string>,
     _ids: PromiseOrValue<BigNumberish>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<Token> {
-    return super.deploy(
-      _collectionName,
-      _uri,
-      _ids,
-      overrides || {}
-    ) as Promise<Token>;
+    return super.deploy(_name, _uri, _ids, overrides || {}) as Promise<Token>;
   }
   override getDeployTransaction(
-    _collectionName: PromiseOrValue<string>,
+    _name: PromiseOrValue<string>,
     _uri: PromiseOrValue<string>,
     _ids: PromiseOrValue<BigNumberish>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): TransactionRequest {
-    return super.getDeployTransaction(
-      _collectionName,
-      _uri,
-      _ids,
-      overrides || {}
-    );
+    return super.getDeployTransaction(_name, _uri, _ids, overrides || {});
   }
   override attach(address: string): Token {
     return super.attach(address) as Token;

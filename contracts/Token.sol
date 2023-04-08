@@ -8,18 +8,18 @@ import "hardhat/console.sol";
 
 contract Token is ERC1155, Ownable {
     uint[] public ids; //uint array of ids
-    string public collectionName; //the token name
+    string public name; //the token name
 
     // 1 contract = 1 collection
     // 1 collection can have multiple tokens, represented by ids
     // 1 collection shares 1 URI
     constructor(
-        string memory _collectionName,
+        string memory _name,
         string memory _uri,
         uint[] memory _ids
     ) Ownable() ERC1155(_uri) {
         ids = _ids;
-        collectionName = _collectionName;
+        name = _name;
     }
 
     function mintBatch(

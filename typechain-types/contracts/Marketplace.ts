@@ -221,7 +221,7 @@ export interface MarketplaceInterface extends utils.Interface {
 export interface NFTBoughtEventObject {
   itemId: BigNumber;
   nftContract: string;
-  collectionName: string;
+  name: string;
   tokenId: BigNumber;
   price: BigNumber;
   seller: string;
@@ -237,7 +237,7 @@ export type NFTBoughtEventFilter = TypedEventFilter<NFTBoughtEvent>;
 export interface NFTListedEventObject {
   itemId: BigNumber;
   nftContract: string;
-  collectionName: string;
+  name: string;
   tokenId: BigNumber;
   price: BigNumber;
   seller: string;
@@ -253,7 +253,7 @@ export type NFTListedEventFilter = TypedEventFilter<NFTListedEvent>;
 export interface NFTUnlistedEventObject {
   itemId: BigNumber;
   nftContract: string;
-  collectionName: string;
+  name: string;
   tokenId: BigNumber;
   price: BigNumber;
   seller: string;
@@ -579,7 +579,7 @@ export interface Marketplace extends BaseContract {
     "NFTBought(uint256,address,string,uint256,uint256,address,address)"(
       itemId?: null,
       nftContract?: null,
-      collectionName?: null,
+      name?: null,
       tokenId?: null,
       price?: null,
       seller?: PromiseOrValue<string> | null,
@@ -588,7 +588,7 @@ export interface Marketplace extends BaseContract {
     NFTBought(
       itemId?: null,
       nftContract?: null,
-      collectionName?: null,
+      name?: null,
       tokenId?: null,
       price?: null,
       seller?: PromiseOrValue<string> | null,
@@ -598,7 +598,7 @@ export interface Marketplace extends BaseContract {
     "NFTListed(uint256,address,string,uint256,uint256,address,address)"(
       itemId?: null,
       nftContract?: null,
-      collectionName?: null,
+      name?: null,
       tokenId?: null,
       price?: null,
       seller?: PromiseOrValue<string> | null,
@@ -607,7 +607,7 @@ export interface Marketplace extends BaseContract {
     NFTListed(
       itemId?: null,
       nftContract?: null,
-      collectionName?: null,
+      name?: null,
       tokenId?: null,
       price?: null,
       seller?: PromiseOrValue<string> | null,
@@ -617,7 +617,7 @@ export interface Marketplace extends BaseContract {
     "NFTUnlisted(uint256,address,string,uint256,uint256,address,address)"(
       itemId?: null,
       nftContract?: null,
-      collectionName?: null,
+      name?: null,
       tokenId?: null,
       price?: null,
       seller?: PromiseOrValue<string> | null,
@@ -626,7 +626,7 @@ export interface Marketplace extends BaseContract {
     NFTUnlisted(
       itemId?: null,
       nftContract?: null,
-      collectionName?: null,
+      name?: null,
       tokenId?: null,
       price?: null,
       seller?: PromiseOrValue<string> | null,

@@ -51,7 +51,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "string",
-        name: "collectionName",
+        name: "name",
         type: "string",
       },
       {
@@ -100,7 +100,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "string",
-        name: "collectionName",
+        name: "name",
         type: "string",
       },
       {
@@ -149,7 +149,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "string",
-        name: "collectionName",
+        name: "name",
         type: "string",
       },
       {
@@ -237,7 +237,7 @@ const _abi = [
           },
           {
             internalType: "string",
-            name: "collectionName",
+            name: "name",
             type: "string",
           },
           {
@@ -302,7 +302,7 @@ const _abi = [
           },
           {
             internalType: "string",
-            name: "collectionName",
+            name: "name",
             type: "string",
           },
           {
@@ -426,7 +426,7 @@ const _abi = [
       },
       {
         internalType: "string",
-        name: "collectionName",
+        name: "name",
         type: "string",
       },
       {
