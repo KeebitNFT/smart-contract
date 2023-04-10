@@ -96,12 +96,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         nfts[itemCount] = MarketNFT(
             itemCount,
             address(_nftContract),
-<<<<<<< HEAD
-            _nftContract.collectionName(),
-            _nftContract.uri(0),
-=======
             _nftContract.name(),
->>>>>>> origin/marketplace-contract
             _tokenId,
             _price,
             payable(msg.sender),

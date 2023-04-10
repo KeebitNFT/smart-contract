@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "_collectionName",
+        "name": "_name",
         "type": "string"
       },
       {
@@ -207,19 +207,6 @@
   },
   {
     "inputs": [],
-    "name": "collectionName",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "countNFT",
     "outputs": [
       {
@@ -296,6 +283,19 @@
       }
     ],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "name",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

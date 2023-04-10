@@ -33,7 +33,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "collectionName",
+        "name": "name",
         "type": "string"
       },
       {
@@ -82,7 +82,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "collectionName",
+        "name": "name",
         "type": "string"
       },
       {
@@ -131,7 +131,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "collectionName",
+        "name": "name",
         "type": "string"
       },
       {
@@ -219,12 +219,7 @@
           },
           {
             "internalType": "string",
-            "name": "collectionName",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "uri",
+            "name": "name",
             "type": "string"
           },
           {
@@ -284,12 +279,7 @@
           },
           {
             "internalType": "string",
-            "name": "collectionName",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "uri",
+            "name": "name",
             "type": "string"
           },
           {
@@ -408,12 +398,7 @@
       },
       {
         "internalType": "string",
-        "name": "collectionName",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "uri",
+        "name": "name",
         "type": "string"
       },
       {

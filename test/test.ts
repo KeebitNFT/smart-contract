@@ -69,7 +69,7 @@ describe('Keebit processes', function () {
       expect(await tokenContract.ids(0)).to.equal(SELLING_IDS[0]);
       expect(await tokenContract.ids(2)).to.equal(SELLING_IDS[2]);
       expect(await tokenContract.uri(0)).to.equal(URI);
-      expect(await tokenContract.collectionName()).to.equal(COLLECTION_NAME);
+      expect(await tokenContract.name()).to.equal(COLLECTION_NAME);
 
       // Check TokenDeployed event emitting
       expect(result).to.emit(factoryContract, 'TokenDeployed');

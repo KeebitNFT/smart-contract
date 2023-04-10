@@ -32,8 +32,7 @@ export declare namespace Marketplace {
   export type MarketNFTStruct = {
     itemId: PromiseOrValue<BigNumberish>;
     nftContract: PromiseOrValue<string>;
-    collectionName: PromiseOrValue<string>;
-    uri: PromiseOrValue<string>;
+    name: PromiseOrValue<string>;
     tokenId: PromiseOrValue<BigNumberish>;
     price: PromiseOrValue<BigNumberish>;
     seller: PromiseOrValue<string>;
@@ -46,7 +45,6 @@ export declare namespace Marketplace {
     BigNumber,
     string,
     string,
-    string,
     BigNumber,
     BigNumber,
     string,
@@ -56,8 +54,7 @@ export declare namespace Marketplace {
   ] & {
     itemId: BigNumber;
     nftContract: string;
-    collectionName: string;
-    uri: string;
+    name: string;
     tokenId: BigNumber;
     price: BigNumber;
     seller: string;
@@ -329,7 +326,6 @@ export interface Marketplace extends BaseContract {
         BigNumber,
         string,
         string,
-        string,
         BigNumber,
         BigNumber,
         string,
@@ -339,8 +335,7 @@ export interface Marketplace extends BaseContract {
       ] & {
         itemId: BigNumber;
         nftContract: string;
-        collectionName: string;
-        uri: string;
+        name: string;
         tokenId: BigNumber;
         price: BigNumber;
         seller: string;
@@ -423,7 +418,6 @@ export interface Marketplace extends BaseContract {
       BigNumber,
       string,
       string,
-      string,
       BigNumber,
       BigNumber,
       string,
@@ -433,8 +427,7 @@ export interface Marketplace extends BaseContract {
     ] & {
       itemId: BigNumber;
       nftContract: string;
-      collectionName: string;
-      uri: string;
+      name: string;
       tokenId: BigNumber;
       price: BigNumber;
       seller: string;
@@ -517,7 +510,6 @@ export interface Marketplace extends BaseContract {
         BigNumber,
         string,
         string,
-        string,
         BigNumber,
         BigNumber,
         string,
@@ -527,8 +519,7 @@ export interface Marketplace extends BaseContract {
       ] & {
         itemId: BigNumber;
         nftContract: string;
-        collectionName: string;
-        uri: string;
+        name: string;
         tokenId: BigNumber;
         price: BigNumber;
         seller: string;
