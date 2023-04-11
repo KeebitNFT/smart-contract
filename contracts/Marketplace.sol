@@ -19,10 +19,11 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         uint itemId;
         address nftContract;
         string name;
+        string uri;
         uint tokenId;
         uint price;
-        address payable seller;
-        address payable owner;
+        address seller;
+        address owner;
         bool isOfficial;
         bool isOnList;
     }
@@ -97,10 +98,11 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             itemCount,
             address(_nftContract),
             _nftContract.name(),
+            _nftContract.uri(0),
             _tokenId,
             _price,
-            payable(msg.sender),
-            payable(address(this)),
+            msg.sender,
+            address(this),
             _isOfficial,
             _isOnlist
         );
@@ -126,11 +128,11 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         );
 
         // Pay seller and owner
-        nfts[_itemId].seller.transfer(nfts[_itemId].price);
+        payable(nfts[_itemId].seller).transfer(nfts[_itemId].price);
         owner.transfer(_totalPrice - nfts[_itemId].price);
 
         // Transfer nft to buyer
-        address payable buyer = payable(msg.sender);
+        address buyer = msg.sender;
         Token(nfts[_itemId].nftContract).safeTransferFrom(
             address(this),
             buyer,
@@ -169,7 +171,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
         itemOnList--;
 
-        nfts[_itemId].owner = payable(msg.sender);
+        nfts[_itemId].owner = msg.sender;
         nfts[_itemId].isOnList = false;
 
         emit NFTUnlisted(
