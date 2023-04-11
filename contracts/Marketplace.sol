@@ -198,7 +198,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
                 nftIndex++;
             }
         }
-        return (listedNFTs);
+        return listedNFTs;
     }
 
     function getMyListedNFTs() external view returns (MarketNFT[] memory) {
@@ -217,7 +217,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
                 nftIndex++;
             }
         }
-        return (myListedNFTs);
+        return myListedNFTs;
     }
 
     function updatePrice(uint _itemId, uint _newPrice) external {
