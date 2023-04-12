@@ -30,7 +30,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
     mapping(uint => MarketNFT) public nfts;
 
     event NFTListed(
-        uint itemId,
+        uint indexed itemId,
         address nftContract,
         string name,
         uint tokenId,
@@ -39,7 +39,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         address indexed owner
     );
     event NFTUnlisted(
-        uint itemId,
+        uint indexed itemId,
         address nftContract,
         string name,
         uint tokenId,
@@ -48,7 +48,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         address indexed owner
     );
     event NFTBought(
-        uint itemId,
+        uint indexed itemId,
         address nftContract,
         string name,
         uint tokenId,

@@ -18,8 +18,12 @@ contract Factory is Ownable {
         uint tokenId;
     }
 
-    event TokenDeployed(address owner, address tokenContract); //emitted when ERC1155 token is deployed
-    event TokenMinted(address owner, address tokenContract, uint amount); //emmited when ERC1155 token is minted
+    event TokenDeployed(address indexed owner, address indexed tokenContract); //emitted when ERC1155 token is deployed
+    event TokenMinted(
+        address indexed owner,
+        address indexed tokenContract,
+        uint amount
+    ); //emmited when ERC1155 token is minted
 
     function saveVendor(address _vendor) external onlyOwner {
         isVendor[_vendor] = true;

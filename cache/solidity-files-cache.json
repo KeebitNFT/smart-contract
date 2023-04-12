@@ -521,8 +521,8 @@
       ]
     },
     "C:\\Users\\USER\\keebit\\smart-contract\\contracts\\Marketplace.sol": {
-      "lastModificationDate": 1681188133177,
-      "contentHash": "3db068840c59eb47fecb76c54333615c",
+      "lastModificationDate": 1681190071616,
+      "contentHash": "c46ffa520dae6877e012563c395d7ef4",
       "sourceName": "contracts/Marketplace.sol",
       "solcConfig": {
         "version": "0.8.18",
