@@ -19,7 +19,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "itemId",
         "type": "uint256"
@@ -68,7 +68,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "itemId",
         "type": "uint256"
@@ -117,7 +117,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "itemId",
         "type": "uint256"
@@ -371,7 +371,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_price",
+        "name": "_nftPrice",
         "type": "uint256"
       }
     ],

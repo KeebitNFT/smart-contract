@@ -67,22 +67,22 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
     function listNFTs(
         address _nftContract,
         uint[] calldata _tokenIds,
-        uint _price
+        uint _nftPrice
     ) external nonReentrant returns (address) {
         require(
             factory.isToken(_nftContract),
             "Only NFTs of a valid token contract can be listed"
         );
         require(_tokenIds.length > 0, "No token id provided");
-        require(_price > 0, "Price must be at least 1 wei");
+        require(_nftPrice > 0, "Price must be at least 1 wei");
 
         for (uint i = 0; i < _tokenIds.length; i++) {
-            _list(Token(_nftContract), _tokenIds[i], _price);
+            _list(Token(_nftContract), _tokenIds[i], _nftPrice);
         }
         return _nftContract;
     }
 
-    function _list(Token _nftContract, uint _tokenId, uint _price) private {
+    function _list(Token _nftContract, uint _tokenId, uint _nftPrice) private {
         _nftContract.safeTransferFrom(
             msg.sender,
             address(this),
@@ -90,6 +90,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             1,
             ""
         );
+        uint _totalPrice = (_nftPrice * (100 + feePercent)) / 100;
         itemCount++;
         itemOnList++;
         bool _isOfficial = factory.isVendor(msg.sender);
@@ -100,7 +101,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             _nftContract.name(),
             _nftContract.uri(0),
             _tokenId,
-            _price,
+            _totalPrice,
             msg.sender,
             address(this),
             _isOfficial,
@@ -111,7 +112,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             address(_nftContract),
             _nftContract.name(),
             _tokenId,
-            _price,
+            _totalPrice,
             msg.sender,
             address(this)
         );
@@ -119,7 +120,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
 
     // Buy nft
     function buyNFT(uint _itemId) external payable nonReentrant {
-        uint _totalPrice = _getTotalPrice(_itemId);
+        uint _totalPrice = nfts[_itemId].price;
         require(_itemId > 0 && _itemId <= itemCount, "item doesn't exist");
         require(nfts[_itemId].isOnList, "item is not for sale");
         require(
@@ -128,8 +129,10 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         );
 
         // Pay seller and owner
-        payable(nfts[_itemId].seller).transfer(nfts[_itemId].price);
-        owner.transfer(_totalPrice - nfts[_itemId].price);
+        uint _nftPrice = (nfts[_itemId].price / (100 + feePercent)) * 100;
+        uint _fee = _totalPrice - _nftPrice;
+        payable(nfts[_itemId].seller).transfer(_nftPrice);
+        owner.transfer(_fee);
 
         // Transfer nft to buyer
         address buyer = msg.sender;
@@ -183,11 +186,6 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             nfts[_itemId].seller,
             nfts[_itemId].owner
         );
-    }
-
-    // total = nft price + transaction fee
-    function _getTotalPrice(uint _itemId) internal view returns (uint) {
-        return (nfts[_itemId].price * (100 + feePercent)) / 100;
     }
 
     // get all currently listed NFTs on the marketplace

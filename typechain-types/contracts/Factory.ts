@@ -347,19 +347,22 @@ export interface Factory extends BaseContract {
     ): OwnershipTransferredEventFilter;
 
     "TokenDeployed(address,address)"(
-      owner?: null,
-      tokenContract?: null
+      owner?: PromiseOrValue<string> | null,
+      tokenContract?: PromiseOrValue<string> | null
     ): TokenDeployedEventFilter;
-    TokenDeployed(owner?: null, tokenContract?: null): TokenDeployedEventFilter;
+    TokenDeployed(
+      owner?: PromiseOrValue<string> | null,
+      tokenContract?: PromiseOrValue<string> | null
+    ): TokenDeployedEventFilter;
 
     "TokenMinted(address,address,uint256)"(
-      owner?: null,
-      tokenContract?: null,
+      owner?: PromiseOrValue<string> | null,
+      tokenContract?: PromiseOrValue<string> | null,
       amount?: null
     ): TokenMintedEventFilter;
     TokenMinted(
-      owner?: null,
-      tokenContract?: null,
+      owner?: PromiseOrValue<string> | null,
+      tokenContract?: PromiseOrValue<string> | null,
       amount?: null
     ): TokenMintedEventFilter;
   };

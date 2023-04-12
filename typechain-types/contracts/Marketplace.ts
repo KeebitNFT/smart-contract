@@ -317,7 +317,7 @@ export interface Marketplace extends BaseContract {
     listNFTs(
       _nftContract: PromiseOrValue<string>,
       _tokenIds: PromiseOrValue<BigNumberish>[],
-      _price: PromiseOrValue<BigNumberish>,
+      _nftPrice: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -411,7 +411,7 @@ export interface Marketplace extends BaseContract {
   listNFTs(
     _nftContract: PromiseOrValue<string>,
     _tokenIds: PromiseOrValue<BigNumberish>[],
-    _price: PromiseOrValue<BigNumberish>,
+    _nftPrice: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -505,7 +505,7 @@ export interface Marketplace extends BaseContract {
     listNFTs(
       _nftContract: PromiseOrValue<string>,
       _tokenIds: PromiseOrValue<BigNumberish>[],
-      _price: PromiseOrValue<BigNumberish>,
+      _nftPrice: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -577,7 +577,7 @@ export interface Marketplace extends BaseContract {
 
   filters: {
     "NFTBought(uint256,address,string,uint256,uint256,address,address)"(
-      itemId?: null,
+      itemId?: PromiseOrValue<BigNumberish> | null,
       nftContract?: null,
       name?: null,
       tokenId?: null,
@@ -586,7 +586,7 @@ export interface Marketplace extends BaseContract {
       owner?: PromiseOrValue<string> | null
     ): NFTBoughtEventFilter;
     NFTBought(
-      itemId?: null,
+      itemId?: PromiseOrValue<BigNumberish> | null,
       nftContract?: null,
       name?: null,
       tokenId?: null,
@@ -596,7 +596,7 @@ export interface Marketplace extends BaseContract {
     ): NFTBoughtEventFilter;
 
     "NFTListed(uint256,address,string,uint256,uint256,address,address)"(
-      itemId?: null,
+      itemId?: PromiseOrValue<BigNumberish> | null,
       nftContract?: null,
       name?: null,
       tokenId?: null,
@@ -605,7 +605,7 @@ export interface Marketplace extends BaseContract {
       owner?: PromiseOrValue<string> | null
     ): NFTListedEventFilter;
     NFTListed(
-      itemId?: null,
+      itemId?: PromiseOrValue<BigNumberish> | null,
       nftContract?: null,
       name?: null,
       tokenId?: null,
@@ -615,7 +615,7 @@ export interface Marketplace extends BaseContract {
     ): NFTListedEventFilter;
 
     "NFTUnlisted(uint256,address,string,uint256,uint256,address,address)"(
-      itemId?: null,
+      itemId?: PromiseOrValue<BigNumberish> | null,
       nftContract?: null,
       name?: null,
       tokenId?: null,
@@ -624,7 +624,7 @@ export interface Marketplace extends BaseContract {
       owner?: PromiseOrValue<string> | null
     ): NFTUnlistedEventFilter;
     NFTUnlisted(
-      itemId?: null,
+      itemId?: PromiseOrValue<BigNumberish> | null,
       nftContract?: null,
       name?: null,
       tokenId?: null,
@@ -655,7 +655,7 @@ export interface Marketplace extends BaseContract {
     listNFTs(
       _nftContract: PromiseOrValue<string>,
       _tokenIds: PromiseOrValue<BigNumberish>[],
-      _price: PromiseOrValue<BigNumberish>,
+      _nftPrice: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -722,7 +722,7 @@ export interface Marketplace extends BaseContract {
     listNFTs(
       _nftContract: PromiseOrValue<string>,
       _tokenIds: PromiseOrValue<BigNumberish>[],
-      _price: PromiseOrValue<BigNumberish>,
+      _nftPrice: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
