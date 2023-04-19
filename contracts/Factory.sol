@@ -16,6 +16,7 @@ contract Factory is Ownable {
         string collectionName;
         string uri;
         uint tokenId;
+        address vendor;
     }
 
     event TokenDeployed(address indexed owner, address indexed tokenContract); //emitted when ERC1155 token is deployed
@@ -111,7 +112,8 @@ contract Factory is Ownable {
                             address(tokens[i]),
                             tokens[i].name(),
                             tokens[i].uri(1),
-                            k + 1
+                            k + 1,
+                            tokens[i].vendorAddress()
                         )
                     );
                     counter++;
