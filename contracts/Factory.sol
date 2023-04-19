@@ -40,7 +40,12 @@ contract Factory is Ownable {
         );
 
         // Deploy contract
-        Token tokenContract = new Token(_collectionName, _uri, _ids);
+        Token tokenContract = new Token(
+            _collectionName,
+            _uri,
+            _ids,
+            msg.sender
+        );
         tokens.push(tokenContract);
         isToken[address(tokenContract)] = true;
         emit TokenDeployed(msg.sender, address(tokenContract));

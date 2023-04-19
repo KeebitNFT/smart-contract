@@ -15,6 +15,11 @@
         "internalType": "uint256[]",
         "name": "_ids",
         "type": "uint256[]"
+      },
+      {
+        "internalType": "address",
+        "name": "_vendorAddress",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -448,6 +453,19 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vendorAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

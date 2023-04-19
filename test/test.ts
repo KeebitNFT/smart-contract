@@ -70,6 +70,7 @@ describe("Keebit processes", function () {
       expect(await tokenContract.ids(2)).to.equal(SELLING_IDS[2]);
       expect(await tokenContract.uri(0)).to.equal(URI);
       expect(await tokenContract.name()).to.equal(COLLECTION_NAME);
+      expect(await tokenContract.vendorAddress()).to.equal(vendor.address);
 
       // Check TokenDeployed event emitting
       expect(result).to.emit(factoryContract, "TokenDeployed");
@@ -163,8 +164,9 @@ describe("Keebit processes", function () {
           uri,
           tokenId,
           price,
-          seller,
-          owner,
+          vendorAddress,
+          sellerAddress,
+          ownerAddress,
           isOfficial,
           isOnList,
         ] = nft;
@@ -173,8 +175,9 @@ describe("Keebit processes", function () {
         expect(name).to.equal(COLLECTION_NAME);
         tokenIds.push(tokenId);
         expect(price).to.equal(PRICE_WITH_FEE);
-        expect(seller).to.equal(vendor.address);
-        expect(owner).to.equal(marketplaceContract.address);
+        expect(vendorAddress).to.equal(vendor.address);
+        expect(sellerAddress).to.equal(vendor.address);
+        expect(ownerAddress).to.equal(marketplaceContract.address);
         expect(isOfficial).to.equal(true);
         expect(isOnList).to.equal(true);
       }
@@ -296,8 +299,9 @@ describe("Keebit processes", function () {
           uri,
           tokenId,
           price,
-          seller,
-          owner,
+          vendorAddress,
+          sellerAddress,
+          ownerAddress,
           isOfficial,
           isOnList,
         ] = nft;
@@ -307,8 +311,9 @@ describe("Keebit processes", function () {
         tokenIds.push(tokenId);
         expect(uri).to.equal(URI);
         expect(price).to.equal(PRICE_WITH_FEE);
-        sellers.push(seller);
-        expect(owner).to.equal(marketplaceContract.address);
+        sellers.push(sellerAddress);
+        expect(vendorAddress).to.equal(vendor.address);
+        expect(ownerAddress).to.equal(marketplaceContract.address);
         isOfficials.push(isOfficial);
         expect(isOnList).to.equal(true);
       }
@@ -343,8 +348,9 @@ describe("Keebit processes", function () {
         uri,
         tokenId,
         price,
-        seller,
-        owner,
+        vendorAddress,
+        sellerAddress,
+        ownerAddress,
         isOfficial,
         isOnList,
       ] = nft;
@@ -355,8 +361,9 @@ describe("Keebit processes", function () {
       expect(tokenId).to.equal(UPDATE_PRICE_ID);
       expect(uri).to.equal(URI);
       expect(price).to.equal(UPDATED_PRICE);
-      expect(seller).to.equal(vendor.address);
-      expect(owner).to.equal(marketplaceContract.address);
+      expect(vendorAddress).to.equal(vendor.address);
+      expect(sellerAddress).to.equal(vendor.address);
+      expect(ownerAddress).to.equal(marketplaceContract.address);
       expect(isOfficial).to.equal(true);
       expect(isOnList).to.equal(true);
     });

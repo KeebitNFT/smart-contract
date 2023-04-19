@@ -45,6 +45,7 @@ export interface TokenInterface extends utils.Interface {
     "supportsInterface(bytes4)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "uri(uint256)": FunctionFragment;
+    "vendorAddress()": FunctionFragment;
   };
 
   getFunction(
@@ -64,6 +65,7 @@ export interface TokenInterface extends utils.Interface {
       | "supportsInterface"
       | "transferOwnership"
       | "uri"
+      | "vendorAddress"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -129,6 +131,10 @@ export interface TokenInterface extends utils.Interface {
     functionFragment: "uri",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "vendorAddress",
+    values?: undefined
+  ): string;
 
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
@@ -169,6 +175,10 @@ export interface TokenInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "uri", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "vendorAddress",
+    data: BytesLike
+  ): Result;
 
   events: {
     "ApprovalForAll(address,address,bool)": EventFragment;
@@ -349,6 +359,8 @@ export interface Token extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    vendorAddress(overrides?: CallOverrides): Promise<[string]>;
   };
 
   balanceOf(
@@ -429,6 +441,8 @@ export interface Token extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  vendorAddress(overrides?: CallOverrides): Promise<string>;
+
   callStatic: {
     balanceOf(
       account: PromiseOrValue<string>,
@@ -505,6 +519,8 @@ export interface Token extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    vendorAddress(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
@@ -643,6 +659,8 @@ export interface Token extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    vendorAddress(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -723,5 +741,7 @@ export interface Token extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    vendorAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

@@ -22,6 +22,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         string uri;
         uint tokenId;
         uint price;
+        address vendor;
         address seller;
         address owner;
         bool isOfficial;
@@ -35,8 +36,9 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         string name,
         uint tokenId,
         uint price,
+        address indexed vendor,
         address indexed seller,
-        address indexed owner
+        address owner
     );
     event NFTUnlisted(
         uint indexed itemId,
@@ -44,8 +46,9 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         string name,
         uint tokenId,
         uint price,
+        address indexed vendor,
         address indexed seller,
-        address indexed owner
+        address owner
     );
     event NFTBought(
         uint indexed itemId,
@@ -53,8 +56,9 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
         string name,
         uint tokenId,
         uint price,
+        address indexed vendor,
         address indexed seller,
-        address indexed owner
+        address owner
     );
 
     constructor(address factoryAddress, uint _feePercent) {
@@ -102,6 +106,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             _nftContract.uri(0),
             _tokenId,
             _totalPrice,
+            _nftContract.vendorAddress(),
             msg.sender,
             address(this),
             _isOfficial,
@@ -113,6 +118,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             _nftContract.name(),
             _tokenId,
             _totalPrice,
+            _nftContract.vendorAddress(),
             msg.sender,
             address(this)
         );
@@ -156,6 +162,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             Token(nfts[_itemId].nftContract).name(),
             nfts[_itemId].tokenId,
             msg.value,
+            Token(nfts[_itemId].nftContract).vendorAddress(),
             nfts[_itemId].seller,
             nfts[_itemId].owner
         );
@@ -183,6 +190,7 @@ contract Marketplace is ReentrancyGuard, ERC1155Holder {
             Token(nfts[_itemId].nftContract).name(),
             nfts[_itemId].tokenId,
             nfts[_itemId].price,
+            Token(nfts[_itemId].nftContract).vendorAddress(),
             nfts[_itemId].seller,
             nfts[_itemId].owner
         );

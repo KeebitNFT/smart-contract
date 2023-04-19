@@ -51,11 +51,17 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "seller",
+        "name": "vendor",
         "type": "address"
       },
       {
         "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "owner",
         "type": "address"
@@ -100,11 +106,17 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "seller",
+        "name": "vendor",
         "type": "address"
       },
       {
         "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "owner",
         "type": "address"
@@ -149,11 +161,17 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "seller",
+        "name": "vendor",
         "type": "address"
       },
       {
         "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "owner",
         "type": "address"
@@ -239,6 +257,11 @@
           },
           {
             "internalType": "address",
+            "name": "vendor",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
             "name": "seller",
             "type": "address"
           },
@@ -301,6 +324,11 @@
             "internalType": "uint256",
             "name": "price",
             "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "vendor",
+            "type": "address"
           },
           {
             "internalType": "address",
@@ -425,6 +453,11 @@
         "internalType": "uint256",
         "name": "price",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "vendor",
+        "type": "address"
       },
       {
         "internalType": "address",
