@@ -33,13 +33,21 @@ export declare namespace Factory {
     collectionName: PromiseOrValue<string>;
     uri: PromiseOrValue<string>;
     tokenId: PromiseOrValue<BigNumberish>;
+    vendor: PromiseOrValue<string>;
   };
 
-  export type FactoryNFTStructOutput = [string, string, string, BigNumber] & {
+  export type FactoryNFTStructOutput = [
+    string,
+    string,
+    string,
+    BigNumber,
+    string
+  ] & {
     nftContract: string;
     collectionName: string;
     uri: string;
     tokenId: BigNumber;
+    vendor: string;
   };
 }
 
